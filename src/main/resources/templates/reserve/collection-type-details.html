@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{base/layout}">
+
+<div layout:fragment="content">
+    <!--header wrapper end-->
+    <!--med_tittle_section-->
+    <div class="med_tittle_section">
+        <div class="med_img_overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="med_tittle_cont_wrapper">
+                        <div class="med_tittle_cont">
+                            <ol class="breadcrumb">
+                                <li><a th:href="@{/}">首页</a></li>
+                                <li><a th:href="@{/collection/collectionTypeUI}">藏品</a></li>
+                                <!--                                <li th:each="type:${typeList}">-->
+                                <!--                                    <a th:href="@{/collection/collectionTypeUI(type=${type})}" th:text="${type}"></a>-->
+                                <!--                                </li>-->
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- med_tittle_section End -->
+    <!--service section start-->
+    <div class="page-container">
+        <div class="container">
+            <div class="row med_toppadder50 med_bottompadder50">
+                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                    <div class="filter-type-box cy-tabs">
+                        <ul class="nav nav-tabs mb-10">
+                            <li class="active">
+                                <a href="javascript:void(0);"><i class="fa"></i>藏品</a>
+                            </li>
+                            <li class="pull-right">
+                                <div class="search-tags">
+                                    <form th:action="@{/collection/collectionTypeUI}" methed="post" name="search-form"
+                                          id="search-form" class="form-inline">
+                                        <div class="input-group">
+                                            <input type="text" name="searchName" th:value="${searchName}"
+                                                   class="form-control">
+                                            <span class="input-group-btn">
+                                                <input class="btn btn-info" type="submit" value="名称搜索"><i
+                                                    class="fa fa-search"></i>  </input>
+                                            </span>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="news-detail-box">
+                        <!--                        <h3 th:text="${Exhibition.name}"></h3>-->
+
+                        <div class="reserve-image" th:each="collection:${page.content}">
+                            <div style="display: flex;flex-wrap: nowrap;margin:10px">
+                                <div style="flex: 1">
+                                    <a th:href="@{/reserve/collectionDetailsUI(id=${collection.id})}">
+                                        <div class="entry-image">
+                                            <img th:src="@{'/images/'+ ${collection.image} +'.jpg'}"
+                                                 alt="Image" width="250px" height="200px">
+                                        </div>
+                                        <div class="entry-content">
+                                            <p th:text="${collection.name}" style="text-align: center;"></p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    <div class="sider-card">
+                        <div class="sider-card-header">
+                            <h3>藏品分类</h3>
+                        </div>
+                        <ul class="sider-list-model-a">
+                            <li th:each="type:${typeList}">
+                                <a th:href="@{/collection/collectionTypeUI(type=${type})}" th:text="${type}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="sider-card">
+                        <div class="sider-card-header">
+                            <h3>热门藏品</h3>
+                        </div>
+                        <ul class="sider-list-model-b">
+                            <li th:each="collection:${top10collection}">
+                                <a th:href="@{/reserve/collectionDetailsUI(id=${collection.id})}"
+                                   th:text="${collection.name}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--service section end-->
+    <script th:inline="javascript">
+        function cancelExhibitionReserve(id, str) {
+            debugger
+            $.ajax({
+                url: '/museum/reserve/cancelExhibitionReserve',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        if (str == '收藏') {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        } else {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        }
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function like(id, str) {
+            debugger
+            $.ajax({
+                url: '/museum/like/save',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        if (str == '点赞') {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        }
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function reset() {
+            //全部清空
+            $('#exampleModalLabel').text('新增评论');
+            $('#content').val('');
+            //显示模态框
+            $('#exampleModal').modal('show')
+        }
+
+        function userComment(id, str) {
+            debugger
+            $("#content")
+            $.ajax({
+                url: '/museum/comment/save',
+                data: {"itemId": id, "content": $("#content").val()},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        if (str == '评论') {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        }
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.global.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.3/index.min.css"/>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.3/index.full.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.3.3/locale/zh-cn.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.11.7/locale/zh-cn.min.js"></script>
+    <script>
+        const vueApp = (() => {
+            const {createApp, ref, reactive, watch} = Vue;
+            const vueApp = createApp({});
+            // dayjs.extend(dayjs_plugin_isSameOrAfter);
+            dayjs.locale('zh-cn');
+            // console.log(dayjs.locale());
+            vueApp.use(ElementPlus, {
+                locale: ElementPlusLocaleZhCn,
+            });
+            document.addEventListener('DOMContentLoaded', () => {
+                vueApp.mount('#vue-app');
+            });
+            return vueApp;
+        })();
+    </script>
+    <style>
+        #vue-app {
+            width: 1000px;
+            height: 500px;
+            margin: 0 auto;
+        }
+
+        :root {
+            --el-color-primary: #00b96b;
+        }
+    </style>
+</head>
+<body>
+<div id="vue-app">
+    <reserve-ticket/>
+</div>
+<script>
+    (() => {
+        const {defineComponent, ref, reactive, watch} = Vue;
+        const {ElMessage} = ElementPlus;
+        // 在Vue.js中注册一个名为'reserve-ticket'的组件，并使用defineComponent方法定义组件的选项。
+        // 在组件选项中，使用template属性指定模板，#reserve-ticket是一个在HTML中定义的模板元素的id选择器。
+        vueApp.component(
+            'reserve-ticket',
+            defineComponent({
+                template: '#reserve-ticket',
+                setup() {
+                    const selectedDate = ref(new Date());
+                    const selectedTime = ref(null);
+                    const amTicketNum = ref(100);
+                    const pmTicketNum = ref(100);
+                    const timeLoading = ref(false);
+                    const loading = ref(false);
+                    const mainForm = reactive({
+                        name: '',
+                        phoneNum: '',
+                        idNum: '',
+                    });
+
+                    const mainFormRef = ref(null);
+                    const reserveTicketFormRef = ref(null);
+
+                    // 监听选中日期的变化 如果选择的日期是今天之前，则回退上一个选择的日期
+                    watch(selectedDate, (newVal, prevVal, onCleanup) => {
+                        if (isCurrDateAfter(dayjs(newVal)) || newVal.getDay() == 1) {
+                            selectedDate.value = new Date();
+                            ElMessage({
+                                message: '不可预约',
+                                type: 'warning',
+                            });
+                        } else {
+                            reqGetTicketNum(onCleanup, newVal);
+                        }
+                    });
+                    const reqGetTicketNum = async (onCleanup, date) => {
+                        timeLoading.value = true;
+                        try {
+                            // 发起请求 获取剩余票数
+                            // 如果重复调用 则取消上次请求
+                            const abortController = new AbortController(); // 中止请求的控制器
+                            onCleanup(() => {
+                                abortController.abort();
+                            });
+                            // await new Promise(resolve => setTimeout(() => resolve({ am: 0, pm: 1 }), 2000));
+                            const format = dayjs(date).format('YYYY-MM-DD');
+                            const res = await fetch('/museum/reserve/getYuyueNum?date=' + format, {
+                                method: 'get',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                // body: JSON.stringify({ itemId: '', date: dayjs(date).format('YYYY-MM-DD') }),
+                                // data: {date:dayjs(date).format('YYYY-MM-DD')},
+                                signal: abortController.signal,
+                            });
+                            const resJSON = await res.json();
+                            console.log(resJSON)
+
+                            amTicketNum.value = resJSON.data.am;
+                            pmTicketNum.value = resJSON.data.pm;
+                            selectedTime.value = null;
+
+                            timeLoading.value = false;
+                        } catch (err) {
+                            if (err && err.name === 'AbortError') {
+                                console.log('请求已取消');
+                            } else {
+                                console.log(err);
+                                alert('获取数据出错');
+                            }
+                        }
+                    };
+
+                    const handleSelectedTimeClick = time => {
+                        selectedTime.value = time;
+                    };
+                    const handleAddPersonClick = () => {
+                        reserveTicketFormRef.value.addFormList();
+                    };
+                    const handleSubmitClick = async () => {
+                        try {
+                            if (!selectedTime.value) {
+                                ElMessage({
+                                    message: '请选择时间段',
+                                    type: 'warning',
+                                });
+                                return;
+                            }
+
+                            // 校验 如果不通过 会直接抛出错误
+                            await Promise.all([mainFormRef.value.validate(), reserveTicketFormRef.value.validate()]);
+
+                            loading.value = true;
+                            try {
+                                // console.log(mainForm);
+                                // console.log(reserveTicketFormRef.value.getFormList());
+
+                                const dateStr = dayjs(selectedDate.value).format('YYYY-MM-DD');
+                                const during = (() => {
+                                    if (selectedTime.value === 'am') {
+                                        return 0;
+                                    } else if (selectedTime.value === 'pm') {
+                                        return 1;
+                                    } else {
+                                        return undefined;
+                                    }
+                                })();
+                                const dataList = [mainForm, ...reserveTicketFormRef.value.getFormList()].map(formItem => ({
+                                    itemId: '',
+                                    name: formItem.name,
+                                    card: formItem.idNum,
+                                    phone: formItem.phoneNum,
+                                    date: dateStr,
+                                    during,
+                                }));
+
+                                // 发起请求 提交
+                                // await new Promise(resolve => setTimeout(() => resolve({ msg: '提交成功' }), 2000));
+                                const res = await fetch('/museum/reserve/saveYuyue', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(dataList),
+                                    // signal: abortController.signal,
+                                });
+                                const resJSON = await res.json();
+                                loading.value = false;
+                                if (resJSON.code == 200) {
+                                    alert('提交成功！');
+                                    // window.location.href = "/travel/reserve/reserveManageUI2";
+                                    // window.location.reload();
+                                    parent.location.href = "http://localhost:8080/museum/reserve/reserveManageUI";
+
+                                } else {
+                                    console.log("提交失败");
+                                    alert("用户未登录!");
+                                }
+
+                                // window.location.href = '主页地址';
+                            } catch (err) {
+                                // console.log(err);
+                                // alert('提交出错');
+                            }
+                        } catch {
+                        }
+                    };
+
+                    const isCurrDateAfter = dateObj => {
+                        return dayjs().isAfter(dayjs(dateObj), 'date');
+                    };
+
+                    return {
+                        selectedDate,
+                        amTicketNum,
+                        pmTicketNum,
+                        mainForm,
+                        selectedTime,
+                        timeLoading,
+                        loading,
+                        mainFormRef,
+                        reserveTicketFormRef,
+                        handleSelectedTimeClick,
+                        handleAddPersonClick,
+                        handleSubmitClick,
+                        isCurrDateAfter,
+                    };
+                },
+            })
+        );
+    })();
+</script>
+<template id="reserve-ticket">
+    <div class="reserve-ticket" v-loading="loading">
+        <div class="top-container">
+            <div>
+                <el-calendar v-model="selectedDate">
+                    <template #date-cell="{ data }">
+                        <div class="calendar-td">
+                            <template v-if="isCurrDateAfter(data.date)">{{ data.date.getDate() }}</template>
+                            <template v-else>
+                                {{ data.date.getDate() }}
+                                <div v-show="data.date.getDay() == 1">
+                                    闭馆
+                                </div>
+                                <div v-show="data.date.getDay() != 1">
+                                    可约
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </el-calendar>
+            </div>
+            <div class="reserve-right" v-loading="timeLoading">
+                <el-form size="large" label-position="top" :model="mainForm" ref="mainFormRef">
+                    <el-form-item>
+                        <el-button
+                                class="reserve-btn"
+                                round
+                                :type="selectedTime === 'am' ? 'success': 'default'"
+                                @click="handleSelectedTimeClick('am')"
+                                :disabled="amTicketNum === 0"
+                        >09:00 ~ 12:00 (余{{ amTicketNum }}张)
+                        </el-button
+                        >
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button
+                                class="reserve-btn"
+                                round
+                                :type="selectedTime === 'pm' ? 'success': 'default'"
+                                @click="handleSelectedTimeClick('pm')"
+                                :disabled="pmTicketNum === 0"
+                        >12:00 ~ 16:00 (余{{ pmTicketNum }}张)
+                        </el-button
+                        >
+                    </el-form-item>
+                    <el-form-item label="姓名" required prop="name" :rules="{required: true, message: '必填项'}">
+                        <el-input placeholder="姓名" v-model="mainForm.name"/>
+                    </el-form-item>
+                    <el-form-item label="身份证号" required prop="idNum" :rules="{required: true, message: '必填项'}">
+                        <el-input placeholder="身份证号" v-model="mainForm.idNum"/>
+                    </el-form-item>
+                    <el-form-item label="手机号" required prop="phoneNum" :rules="{required: true, message: '必填项'}">
+                        <el-input placeholder="手机号" v-model="mainForm.phoneNum"/>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button class="reserve-btn" @click="handleAddPersonClick" plain type="warning">+添加同行人
+                        </el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+        <div>
+            <reserve-ticket-form ref="reserveTicketFormRef"/>
+        </div>
+        <div class="submit-container">
+            <el-button @click="handleSubmitClick" type="primary">提交预约信息</el-button>
+        </div>
+    </div>
+</template>
+<style>
+    .reserve-ticket {
+        padding: 30px 0;
+    }
+
+    .reserve-ticket > .top-container {
+        display: flex;
+        height: 100%;
+    }
+
+    .reserve-ticket .calendar-td {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .reserve-ticket > .top-container > div {
+        flex: 1;
+    }
+
+    .reserve-ticket > .top-container .reserve-right {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reserve-ticket > .top-container .reserve-btn {
+        width: 100%;
+    }
+
+    .reserve-ticket .submit-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<script>
+    (() => {
+        const {defineComponent, ref, reactive, watch, computed} = Vue;
+        vueApp.component(
+            'reserve-ticket-form',
+            defineComponent({
+                template: '#reserve-ticket-form',
+                setup(props, context) {
+                    const formList = reactive([]);
+                    const formRefList = ref([]);
+
+                    context.expose({
+                        addFormList() {
+                            // 限制只能添加4个人
+                            if (formList.length >= 4) {
+                                return;
+                            }
+                            formList.push({
+                                name: '',
+                                idNum: '',
+                                phoneNum: '',
+                            });
+                        },
+                        getFormList() {
+                            return formList;
+                        },
+                        async validate() {
+                            let result = true;
+                            for (const formRef of formRefList.value) {
+                                try {
+                                    // 校验 如果不通过 会直接抛出错误
+                                    await formRef.validate();
+                                } catch {
+                                    result = false;
+                                }
+                            }
+                            if (!result) {
+                                throw new Error('校验不通过');
+                            }
+                        },
+                    });
+
+                    const handleCloseClick = index => {
+                        formList.splice(index, 1);
+                    };
+
+                    return {formList, handleCloseClick, formRefList};
+                },
+            })
+        );
+    })();
+</script>
+<template id="reserve-ticket-form">
+    <div class="reserve-ticket-form">
+        <el-form v-for="(item, index) in formList" :model="item" ref="formRefList" inline class="form">
+            <el-form-item label="姓名" required prop="name" :rules="{required: true, message: '必填项'}">
+                <el-input v-model="item.name"/>
+            </el-form-item>
+            <el-form-item label="身份证号" required prop="idNum" :rules="{required: true, message: '必填项'}">
+                <el-input v-model="item.idNum"/>
+            </el-form-item>
+            <el-form-item label="手机号码" required prop="phoneNum" :rules="{required: true, message: '必填项'}">
+                <el-input v-model="item.phoneNum"/>
+            </el-form-item>
+            <div class="close-icon" @click="handleCloseClick(index)">x</div>
+        </el-form>
+    </div>
+</template>
+<style>
+    .reserve-ticket-form .form {
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
+    .reserve-ticket-form .form .close-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translate(0, -100%);
+        cursor: pointer;
+        /* display: flex; */
+        /* justify-content: space-around; */
+    }
+</style>
+</body>
+</html>

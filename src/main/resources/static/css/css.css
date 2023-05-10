@@ -1,0 +1,150 @@
+*{padding: 0; margin: 0; border: none; outline: none;}
+body{ font-size: 14px; font-family: '微软雅黑'; color: #666; background: #f6f6f6;}
+ul,li{ list-style-type: none;}
+a{ text-decoration: none; color: #666;}
+a:hover{color:#02b2b5;}
+
+.header{width: 100%; height: auto; overflow: hidden; background: #02b2b5;}
+.header .top{width: 1200px; height: 120px; overflow: hidden; margin: 0 auto;}
+.header .top h1{height: 120px; line-height: 120px; font-size: 30px; text-indent: 105px; float: left; background:url(../../templates/Museum/img/logo.png) no-repeat left center;}
+.header .top h1 a{color: #fff;}
+.header .top .info{ float: right; font-size: 15px; color: #fff; padding-top: 40px;}
+.header .top .info p{ text-align: right;}
+.header .nav{width: 100%; height: 50px; background: #fff;}
+.header .nav .center{width: 1200px; height: auto; overflow: hidden; margin: 0 auto;}
+.header .nav ul{width: auto; height: auto; overflow: hidden; float: left;}
+.header .nav ul li{ display: inline-block;}
+.header .nav ul li a{width: 100px; height: 50px; line-height: 50px; overflow: hidden; display: block; font-size: 16px;}
+.header .nav ul li.on a{color: #02B2B5;}
+.header .nav .search{ float: right; width: 320px; height: 35px; background: #02b2b5; margin-top: 8px;}
+.header .nav .search input{width: 236px; height: 31px; background: #fff; line-height: 31px; float: left; margin: 2px 0 0 2px; text-indent: 10px;}
+.header .nav .search button{width: 82px; height: 35px; line-height: 35px; background: none; color: #fff;}
+
+.banner{width: 100%; height: auto; overflow: hidden;}
+.banner img{width: 100%; display: block;}
+.lmbanner{width: 100%; height: auto; overflow: hidden;}
+.lmbanner img{display: block; width: 100%;}
+
+.wrap{width: 1200px; height: auto; overflow: hidden; margin: 0 auto;}
+.wrap_01{width: 100%; height: auto; overflow: hidden; margin: 50px 0;}
+.wrap_01 .l{width: 825px; height:300px; overflow: hidden; float: left; background: #fff;}
+.wrap_01 .l .title{width: 100%; height: 45px; line-height: 45px; text-indent: 10px; font-size: 18px; color: #02B2B5;}
+.wrap_01 .l ul{width: 100%; height: auto; overflow: hidden; margin-top: 5px;}
+.wrap_01 .l ul li{ float: left; margin: 0 10px; position: relative; overflow: hidden;}
+.wrap_01 .l ul li img{ display: block;}
+.wrap_01 .l ul li p{width: 100%; height: 90px; line-height: 26px; transition: all 0.4s; text-align: center; position: absolute; bottom: -90px; background: rgba(0,0,0,0.5); color: #fff;}
+.wrap_01 .l ul li:hover p{ bottom: 0;}
+.wrap_01 .r{width: 355px; height: 300px; overflow: hidden; float: right; background: #fff;}
+.wrap_01 .r .title{width: 100%; height: 45px; line-height: 45px; text-indent: 10px; font-size: 18px; color: #02B2B5;}
+.wrap_01 .r .item{ padding: 0 10px;}
+.wrap_01 .r p{color:#8A8A8A; line-height: 1.8; margin: 5px 0 15px 0;}
+.wrap_01 .r p span{color: #4B4B4B;}
+
+.wrap_02{width: 100%; height: 348px; background: url(../images/wrap_2_bg2.jpg) no-repeat left top; overflow: hidden;}
+.wrap_02 .info{width: 520px; height: auto; overflow: hidden; float: right; margin: 40px 30px 0 0;}
+.wrap_02 .info h2{ font-size: 18px; color: #D5D5D5; margin-bottom: 8px;}
+.wrap_02 .info p{ color: #D5D5D5; line-height: 1.6; margin-bottom: 8px;}
+.www{}
+.wrap_03{width: 100%; height: auto; overflow: hidden; background: #fff; margin: 50px 0;}
+.wrap_03 .title{width: 100%; height: auto; overflow: hidden; padding: 25px 0 0 0; border-bottom: 1px solid #f0f0f0; text-align: center; margin-bottom: 40px;}
+.wrap_03 .title h2{ font-size: 18px; color: #02B2B5; display: inline-block; border-bottom: 3px solid #02B2B5; padding-bottom: 15px;}
+.wrap_03 ul li{ float: left; margin-left: 32px; margin-bottom: 15px;}
+.wrap_03 ul li img{display: block; width: 260px; height: 200px;}
+.wrap_03 ul li p{ line-height: 40px; text-align: center;}
+
+.wrap_04{width: 100%; height: auto; overflow: hidden;}
+.wrap_04 .l{width: 850px; height: 388px; overflow: hidden; float: left; background: #fff;}
+.wrap_04 .l .tab{width: 100%; height: auto; overflow: hidden; border-bottom: 1px solid #02B2B5; border-left: 1px solid #D5D5D5;}
+.wrap_04 .l .tab ul li{ float: left; width: 115px; line-height: 50px; text-align: center; border-right: 1px solid #D5D5D5; border-top: 1px solid #D5D5D5;}
+.wrap_04 .l .tab ul li a{ display: block; line-height: 50px;}
+.wrap_04 .l .tab ul li.on a{ color: #02B2B5;}
+.wrap_04 .l dl{ padding: 0 20px; margin-top: 22px;}
+.wrap_04 .l dl dt{ float: left;}
+.wrap_04 .l dl dt img{ display: block; width: 220px; height: 110px; margin: 0 12px 12px 0;}
+.wrap_04 .l dl dd{width: 570px; height: auto; float: right;}
+.wrap_04 .l dl dd a span{ float: right;}
+.wrap_04 .l dl dd p{color: #a9a9a9; margin-top: 10px; line-height: 1.8; text-align: justify;}
+.wrap_04 .l .box ul{width: 810px; height: auto; overflow: hidden; margin: 10px auto 0; border-top: 1px dashed #e5e5e5;}
+.wrap_04 .l .box ul li{width: 100%; height: 47px; line-height: 47px; border-bottom: 1px dashed #e5e5e5;}
+.wrap_04 .l .box ul li a{ float: left;}
+.wrap_04 .l .box ul li span{ float: right;}
+.wrap_04 .r{width: 340px; height: 388px; overflow: hidden; float: right; background: #fff;}
+.wrap_04 .r .div_01{width: 100%; height: 95px; background: url(../../templates/Museum/img/msyy.jpg) no-repeat center top; overflow: hidden; border-bottom: 10px solid #f6f6f6;}
+.wrap_04 .r .div_01 h2{color: #fff; font-size: 18px; color: #fff; text-indent: 20px; margin-top: 30px; font-weight: normal;}
+.wrap_04 .r .div_01 p{color: #99efe6; text-indent: 20px;}
+.wrap_04 .r .div_02 .title{width: 100%; height: 48px; border-bottom: 1px solid #ccc; margin-bottom: 5px;}
+.wrap_04 .r .div_02 .title h2{width: 95px; height: 45px; text-align: center; border-bottom: 3px solid #02b2b5; color: #02b2b5; float: left; line-height: 45px; font-size: 16px; font-weight: normal;}
+.wrap_04 .r .div_02 .title a{ float: right; line-height: 48px;}
+.wrap_04 .r .div_02 ul li{width: 100%; height: 45px; line-height: 45px; border-bottom: 1px dashed #e5e5e5;}
+.wrap_04 .r .div_02 ul li a{ float: left; width: 228px; height: 45px; line-height: 45px; display: block; text-indent: 10px;}
+.wrap_04 .r .div_02 ul li p{ float: right; margin-right: 10px;}
+
+.footer{width: 100%; height: auto; overflow: hidden; background: #282828; margin-top: 40px;}
+.footer p{width: 100%; height: 80px; line-height: 80px; text-align: center; font-size: 24px;}
+.footer ul{width: 100%; height: auto; overflow: hidden; text-align: center; padding-bottom: 20px;}
+.footer ul li{ display: inline-block; margin: 0 30px;}
+.footer .copy{width: 100%; height: 40px; line-height: 40px; background: #000; text-align: center;}
+
+
+.main{width: 1200px; height: auto; overflow: hidden; margin: 20px auto 0;}
+.main .mleft{width:260px; height: auto; overflow: hidden; float: left; background: #fff;}
+.main .mleft h2{width: 100%; height: 45px; line-height: 45px; background: #02B2B5; color: #fff; text-indent: 10px; font-size: 16px;}
+.main .mleft ul li a{display: block; width: 100%; height: 45px; line-height: 45px; text-indent: 10px; border-bottom: 1px dotted #ccc;}
+.main .mleft ul li.on a{ color: #02B2B5;}
+.main .mright{width: 920px; height: auto; overflow: hidden; background: #fff; float: right;}
+.main .mright .title{width: 100%; height: auto; overflow: hidden; border-bottom: 1px solid #ccc;}
+.main .mright .title h2{height: 48px; line-height: 48px; padding: 0 20px; float: left; border-bottom: 2px solid #02b2b5; font-size: 16px; color: #02b2b5;}
+
+.about{width: 1200px; height: auto; overflow: hidden; padding: 20px; box-sizing: border-box; background: #fff; margin: 0 auto;}
+.about .title{width: 100%; height: auto; overflow: hidden; border-bottom: 1px solid #ccc; margin-bottom: 20px;}
+.about .title h2{height: 48px; line-height: 48px; float: left; border-bottom: 2px solid #02b2b5; font-size: 16px; color: #02b2b5;}
+.about .box{width: 100%; height: auto; overflow: hidden; padding-bottom: 10px;}
+.about .box p{line-height: 1.8; text-indent: 2em; padding-bottom: 15px;}
+.about .map img{display: block; width: 100%;}
+
+.product{width: 100%; height: auto; overflow: hidden; padding: 20px; box-sizing: border-box;}
+.product ul{width: 110%;}
+.product ul li{width: 270px; height: auto; overflow: hidden; float: left; margin-right: 36px;}
+.product ul li img{width: 270px; height: 210px;}
+.product ul li p{width: 100%; height: 45px; line-height: 30px; text-align: center;}
+
+.service{width: 100%; height: auto; overflow: hidden; padding: 20px; box-sizing: border-box;}
+.service p{ line-height: 1.8;}
+.service img{display: block; width: 100%; margin-top: 20px;}
+
+.message{width: 100%; height: auto; overflow: hidden; padding: 20px 20px 50px; box-sizing: border-box;}
+.message .bt{width: 100%; height: auto; overflow: hidden; padding:10px 0 20px 0; text-align: center; font-size: 18px;}
+.message form{width: 100%; height: auto; overflow: hidden;}
+.message form dt{font-size: 16px; margin-bottom: 10px; border-left: 3px solid #02B2B5; text-indent: 8px;}
+.message form dd{ margin-bottom: 30px;}
+.message form dd label{display: inline-block; margin-right: 20px; cursor: pointer;}
+.message form dd label input{ margin-right: 5px;}
+.message form dd input.input{width: 300px; height: 30px; border: 1px solid #ccc; text-indent: 10px; margin-right: 20px;}
+.message form dd textarea{width: 100%; height: 200px; border: 1px solid #ccc; box-sizing: border-box;}
+.message form button{width: 200px; height: 40px; line-height: 40px; background: #02B2B5; color: #fff;}
+
+.news{width: 100%; height: auto; overflow: hidden; padding: 20px; box-sizing: border-box;}
+.news ul li{width: 100%; height: auto; overflow: hidden; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px dotted #ccc;}
+.news ul li .time{width: 84px; height: 84px; background: #f2f2f2; color: #666; float: left; display: flex; align-items: center; flex-direction: column; justify-content: center;}
+.news ul li .time p{font-size: 25px;}
+.news ul li .info{width: 766px; height: auto; overflow: hidden; float: right;}
+.news ul li .info a{ color: #000;}
+.news ul li .info a:hover{ color: #02B2B5;}
+.news ul li .info p{padding: 5px 0; line-height: 24px; color: grey;}
+.bnews{width: 100%; height: auto; overflow: hidden; padding: 20px; box-sizing: border-box;}
+.bnews ul li{width: 100%; height: 40px; line-height: 40px; overflow: hidden; border-bottom: 1px dotted #ccc;}
+.bnews ul li a{ float: left;}
+.bnews ul li time{ float: right;}
+
+.article{width: 100%; height: auto; overflow: hidden; padding: 20px; box-sizing: border-box;}
+.article h2{ color: #333; font-size: 25px; width: 100%; height: auto; overflow: hidden; font-weight: normal; padding-top: 30px;}
+.article .info{ font-size: 13px; color: #adadad; width: 100%; height: auto; overflow: hidden; padding: 20px 0; border-bottom: 1px solid #E5E5E5;}
+.article .art{width: 100%; height: auto; overflow: hidden; line-height: 1.5; padding: 20px 0; border-bottom: 1px solid #E5E5E5;}
+.article .art p{ margin-bottom: 20px;}
+.article .pagefy{width: 100%; height: auto; overflow: hidden; padding: 20px 0;}
+.article .pagefy ul li { line-height: 30px;}
+
+.pages{width: 100%; height: auto; overflow: hidden; padding-bottom: 30px;}
+.pages ul{ float: right; padding-right: 20px;}
+.pages ul li{float: left; margin-left: 5px;}
+.pages ul li a{display: block; padding: 5px 10px; border: 1px solid #ccc;}

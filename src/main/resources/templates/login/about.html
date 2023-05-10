@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{base/layout}">
+<div layout:fragment="content">
+    <div class="med_tittle_section">
+        <div class="med_img_overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="med_tittle_cont_wrapper">
+                        <div class="med_tittle_cont">
+                            <ol class="breadcrumb">
+                                <li><a th:href="@{/}">首页</a></li>
+                                <li>博物馆简介</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!--        <img class="image_fade" src="images/pic-kx04.jpg" alt="Image">-->
+        <!--        <div class="lmbanner"><img src="imgq.png"></div>-->
+        <!--        <div class="lmbanner"><img src="../img/aboutbg.jpg"></div>-->
+        <div class="row med_toppadder50 med_bottompadder50">
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12" style="width:1150px">
+                <div class="filter-type-box cy-tabs">
+                    <ul class="nav nav-tabs mb-10">
+                        <li class="active">
+                            <a href="javascript:void(0);"><i class="fa"></i>
+                                <h3>博物馆简介</h3></a>
+                        </li>
+                    </ul>
+                    <div style="margin: 20px;font-size: 15px;text-indent:2em">
+                        <p>
+                            山东省博物馆是新中国成立后建立的第一座省级综合性地志博物馆，成立于1954年。当时的馆址分为东西两院，东院位于济南市广智院街广智院旧址，系1904年英国浸礼教会牧师怀恩光创建，原是中国境内最早的博物馆之一；西院位于济南市上新街世界红万字会济南母院旧址，原是一处融道、佛、儒、基督、伊斯兰五教合一的宗教团体驻地，1942年建成。山东省博物馆成立后，将济南广智院旧址辟为自然陈列室、世界红万字会济南母院旧址辟为历史陈列室。</p>
+                        <p>
+                            山东省博物馆建馆之初，藏品来源主要有以下几个方面：一是调拨了原山东省图书馆金石保存所收藏的青铜器、书画、善本书等一批文物；二是接收了原济南广智院历年来搜集的动植物标本、古生物化石以及各类文物藏品；三是接收了原解放区山东人民政府古代文物管理委员会在抗日战争和解放战争时期收集保护的各类文物；另外还接收了部分二十世纪五、六十年代人民群众捐献的传世文物。</p>
+                        <p>
+                            为适应新馆全方位高标准提升的工作需要，自新馆建设项目确立起，山东省文化厅、山东省文物局就积极筹划山东博物馆人才队伍的壮大和优化，重视对博物馆复合型人才的培养和吸纳，为山东博物馆持续、健康、快速发展建立坚实的人才资源基础。
+                            新的山东博物馆不仅承载着山东省博物馆百年发展历史，也承载着新馆建设者和文博工作者繁荣文博事业的信心。在省委、省政府的正确领导和社会各界的关心支持下，山东博物馆将扎实做好各项工作，创造出无愧于历史和时代的一流业绩，服务于社会大众，为建设文化强省履行职责</p>
+                    </div>
+                    <div style="padding: 15px">
+                        <img src="images/jianjie01.jpg" alt="" style="width:1080px;height: 600px">
+                    </div>
+                </div>
+                <div class="filter-type-box cy-tabs">
+                    <ul class="nav nav-tabs mb-10">
+                        <li class="active">
+                            <a href="javascript:void(0);"><i class="fa"></i>
+                                <h3>周边位置</h3></a>
+                        </li>
+                    </ul>
+                    <div style="padding: 15px">
+                        <img src="images/ditu.jpg" alt="" style="width:1090px;height: 600px">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--       style="background-color: #48b6c1"
+         <div class="news-detail-box" style="width:1140px;height:800px;margin:60px 0px;background-color: #48b6c1">-->
+        <!--            <div style="width:500px;height:40px;text-align: center;margin-top: 20px;margin-bottom: 20px;font-size: 20px;color: #1a1a1a;background-color: #8E44AD">博物馆简介</div>-->
+        <!--                <div><img src="images/index-jianjie.jpg" alt="" style=""></div>-->
+    </div>
+
+</div>
+</div>
+</div>
+<script th:inline="javascript">
+
+    function saveForm() {
+        $.ajax({
+            url: '/museum/login',
+            data: $("#form-submit").serialize(),
+            type: 'post',
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == 200) {
+                    window.location.href = "/museum";
+                } else {
+                    alert(result.message);
+                }
+            }
+        })
+    }
+
+
+</script>
+</div>
+</html>

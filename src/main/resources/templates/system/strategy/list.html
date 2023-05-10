@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{system/base/layout}">
+<div layout:fragment="content">
+
+
+    <div class="container" style="width: 1400px">
+        <h1>资讯管理</h1>
+        <div class="row clearfix">
+            <form name="search-form" class="form-inline m-b-10 clearfix" th:action="@{/system/ExhibitionListUI}"
+                  id="search-form">
+            </form>
+
+            <div align="right" style="float:right">
+                <button type="button" onclick="reset()" class="btn btn-default btn-warning">增加</button>
+            </div>
+            <div class="col-md-12 column">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th width="250px">标题</th>
+                        <th width="500px">描述</th>
+                        <th width="300px">创建日期</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="strategy:${page.content}">
+                        <td th:text="${strategy.title}"></td>
+
+                        <td>
+                            <textarea cols="80px" rows="8px" th:text="${strategy.describe}"></textarea>
+                        </td>
+                        <td th:text="${strategy.createDate}"></td>
+
+                        <td>
+                            <div align="left" style="float:left">
+                                <button type="button" th:onclick="updateMember([[${strategy.id}]])"
+                                        class="btn btn-default btn-info">修改
+                                </button>
+                            </div>
+                            <!--                            <div  align="left">-->
+                            <!--                                <button type="button"  th:onclick="updateTravelStrategyStatusSH([[${strategy.id}]])" class="btn btn-default btn-danger">通过</button>-->
+                            <!--                            </div>-->
+                            <div align="left">
+                                <button type="button" th:onclick="updateTravelStrategyStatus([[${strategy.id}]])"
+                                        class="btn btn-default btn-danger">删除
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div th:insert="~{base/pageable}"></div>
+    </div>
+
+
+    <!--弹框-->
+    <div class="modal fade" id="exampleModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" name="insertMember"
+                          id="insertMember" class="form-horizontal">
+                        <!--隐藏的-->
+                        <input type="text" id="id" name="id" hidden>
+
+                        <div id="usernameDiv" class="form-group m-b-10" style="text-align:right">
+                            <label class="col-sm-4 control-label">
+                                <label style="color: red">*</label>标题:
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="title" name="title">
+                            </div>
+                        </div>
+                        <div class="form-group m-b-10" style="text-align:right">
+                            <label class="col-sm-4 control-label">
+                                资讯内容:
+                            </label>
+                            <div class="col-sm-7">
+                                <textarea type="text" rows="7" cols="20" class="form-control" id="describe"
+                                          name="describe">
+                                </textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                    <button type="button" class="btn btn-info" onclick="saveForm()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+
+        function saveForm() {
+            //name
+            var title = $('#title').val();
+            var describe = $('#describe').val();
+            if ($.trim(title) === '') {
+                layer.msg("名称不能为空");
+                return;
+            }
+            if ($.trim(describe) === '') {
+                layer.msg("describe不能为空!");
+                return;
+            }
+            $.ajax({
+                url: '/museum/system/adminSaveTravelStrategy',
+                data: {title: title, describe: describe},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.href = "/museum/system/travelStrategyListUI";
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function reset() {
+            //全部清空
+            $('#exampleModalLabel').text('新增资讯');
+            //id
+            $('#id').val('');
+            //name
+            $('#title').val('');
+            //address
+            $('#address').val('');
+            //describe
+            $('#describe').val('');
+            //显示模态框
+            $('#exampleModal').modal('show')
+        }
+
+        function getSelectedImageName(inputFileElement) {
+            if (!inputFileElement || !inputFileElement.files || inputFileElement.files.length === 0) {
+                return null; // 没有选择图片文件，返回null
+            }
+            return inputFileElement.files[0].name; // 返回第一个选择的文件的名称
+        }
+
+        function updateMember(id) {
+            $.ajax({
+                url: '/museum/system/getTravelStrategyById',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 200) {
+                        var exhibition = result.data;
+                        //全部清空
+                        $('#exampleModalLabel').text('修改资讯');
+                        //id
+                        $('#id').val(exhibition.id);
+                        //describe
+                        $('#describe').val(exhibition.describe);
+
+                        $('#title').val(exhibition.title);
+                        //显示模态框
+                        $('#exampleModal').modal('show')
+                    }
+                }
+            });
+        }
+
+        function updateTravelStrategyStatus(id) {
+            $.ajax({
+                url: '/museum/system/updateTravelStrategyStatus',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.reload();
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function updateTravelStrategyStatusSH(id) {
+            $.ajax({
+                url: '/museum/system/updateTravelStrategyStatusSH',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.reload();
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+
+    </script>
+</div>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>博物馆后端管理系统</title>
+</head>
+<body style="text-align: center;font-size:20px">
+<div class="container" style="text-align: center;font-size:20px">
+    <div class="row clearfix">
+        <div class="col-md-12 column" style="width: 600px;height: 400px;background-color: #D7D3D0;text-align: center;margin: 50px 500px;padding-top: 30px;border-radius: 10px">
+            <div style="margin-top:20px"><h1>博物馆预约后端管理系统</h1></div>
+            <form method="post" id="form-submit" name="form-submit">
+                <div class="form-group" style="width: 600px;height: 40px;margin:30px 0px 30px 0px;font-size: 20px;text-align: center">
+                    <label>账号</label>
+                    <input name="username" id="username" type="text" style="width: 400px;height: 40px;border-radius: 5px"/>
+                </div>
+                <div ></div>
+                <div class="form-group" style="width: 600px;height: 40px;margin:30px 0px 30px 0px;font-size:20px;text-align: center" >
+                    <label>密码</label>
+                    <input name="password" id="password" type="password" style="width: 400px;height: 40px;border-radius: 5px"/>
+                </div>
+                <button type="button" class="button" onclick="saveForm()" style="width: 200px;height: 40px;margin: 30px;font-size: 20px;border-radius: 18px">登录</button>
+            </form>
+        </div>
+    </div>
+
+    <!--main js files 所有可能用到的js-->
+    <script th:src="@{/js/jquery_min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/wow.min.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+    <script th:src="@{/plugins/slider-pro/js/jquery.sliderPro.min.js}"></script>
+    <script th:src="@{/plugins/owlcarousel/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/layer/layer.js}"></script>
+    <!--js code-->
+    <script th:inline="javascript">
+
+        function saveForm() {
+            $.ajax({
+                url: '/museum/system/login',
+                data: $("#form-submit").serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 200) {
+                        window.location.href = "/museum/system/userListUI";
+                    }else {
+                        alert(result.message);
+                    }
+                }
+            })
+        }
+
+
+
+    </script>
+</div>
+</body>
+<!--<body style="text-align:center;background-color: #9999CC;">-->
+<!--<div class="container" >-->
+<!--    <div class="row clearfix">-->
+<!--        <div class="col-md-12 column" style="width: 800px;height: 500px;background-color: #2ecd99;text-align: center">-->
+<!--            <div style="margin-top:20px"><h1>博物馆预约后端管理系统</h1></div>-->
+<!--            <form method="post" id="form-submit" name="form-submit">-->
+<!--                <div class="form-group" style="width: 600px;height: 60px;margin:30px 0px 30px 0px;font-size: 20px;text-align: center">-->
+<!--                    <label>账号</label>-->
+<!--                    <input name="username" id="username" type="text" style="width: 400px;height: 60px"/>-->
+<!--                </div>-->
+<!--                <div ></div>-->
+<!--                <div class="form-group" style="width: 800px;height: 60px;margin:30px 0px 30px 0px;font-size:20px;text-align: center" >-->
+<!--                    <label>密码</label>-->
+<!--                    <input name="password" id="password" type="password" style="width: 400px;height: 60px"/>-->
+<!--                </div>-->
+<!--                <button type="button" class="button" onclick="saveForm()" style="width: 600px;height: 60px;margin: 30px;font-size: 20px">登录</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash;main js files 所有可能用到的js&ndash;&gt;-->
+<!--    <script th:src="@{/js/jquery_min.js}"></script>-->
+<!--    <script th:src="@{/js/bootstrap.min.js}"></script>-->
+<!--    <script th:src="@{/js/wow.min.js}"></script>-->
+<!--    <script th:src="@{/js/custom.js}"></script>-->
+<!--    <script th:src="@{/plugins/slider-pro/js/jquery.sliderPro.min.js}"></script>-->
+<!--    <script th:src="@{/plugins/owlcarousel/js/owl.carousel.min.js}"></script>-->
+<!--    <script th:src="@{/layer/layer.js}"></script>-->
+<!--    &lt;!&ndash;js code&ndash;&gt;-->
+<!--    <script th:inline="javascript">-->
+
+<!--        function saveForm() {-->
+<!--            $.ajax({-->
+<!--                url: '/travel/system/login',-->
+<!--                data: $("#form-submit").serialize(),-->
+<!--                type: 'post',-->
+<!--                dataType: 'json',-->
+<!--                success: function (result) {-->
+<!--                    if (result.code == 200) {-->
+<!--                        window.location.href = "/travel/system/userListUI";-->
+<!--                    }else {-->
+<!--                        alert(result.message);-->
+<!--                    }-->
+<!--                }-->
+<!--            })-->
+<!--        }-->
+
+
+
+<!--    </script>-->
+<!--</div>-->
+<!--</body>-->
+</html>

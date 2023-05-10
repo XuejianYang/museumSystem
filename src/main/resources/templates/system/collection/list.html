@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{system/base/layout}">
+<div layout:fragment="content">
+
+    <div class="container" style="width: 1400px">
+        <h1>藏品统计</h1>
+        <div id="aa">
+            <iframe noresize="noresize"
+                    style="background: transparent; width: 100%; height: 500px;"scrolling="no";
+                    src="http://localhost:8080/museum/system/collectionUI">
+            </iframe>
+        </div>
+        <h1>藏品管理</h1>
+        <div class="row clearfix">
+            <form name="search-form" class="form-inline m-b-10 clearfix" th:action="@{/system/collectionListUI}"
+                  id="search-form">
+            </form>
+
+            <div align="right" style="float:right">
+                <button type="button" onclick="reset()" class="btn btn-default btn-warning">增加</button>
+            </div>
+            <div class="col-md-12 column">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th width="150px">名称</th>
+                        <th width="170px">图片</th>
+                        <th width="150px">位置</th>
+                        <th width="500px">描述</th>
+                        <th width="100px">分类</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="collection:${page.content}">
+                        <td th:text="${collection.name}"></td>
+                        <td><img width="170px" th:src="@{'/images/'+ ${collection.image} +'.jpg'}"></td>
+                        <td th:text="${collection.address}"></td>
+                        <td>
+                            <textarea cols="80px" rows="8px" th:text="${collection.describe}" disabled="disabled"></textarea>
+                        </td>
+                        <td th:text="${collection.type}" style="align-items: center"></td>
+                        <td>
+                            <div align="left" style="float:left">
+                                <button type="button" th:onclick="updateMember([[${collection.id}]])"
+                                        class="btn btn-default btn-info">修改
+                                </button>
+                            </div>
+                            <div align="left">
+                                <button type="button" th:onclick="updateStatus([[${collection.id}]])"
+                                        class="btn btn-default btn-danger">删除
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div th:insert="~{base/pageable}"></div>
+    </div>
+    <!--弹框-->
+    <div class="modal fade" id="exampleModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" name="insertMember"
+                          id="insertMember" class="form-horizontal">
+                        <!--隐藏的-->
+                        <input type="text" id="id" name="id" hidden>
+
+                        <div id="usernameDiv" class="form-group m-b-10" style="text-align:right">
+                            <label class="col-sm-4 control-label">
+                                <label style="color: red">*</label>藏品名:
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                        </div>
+                        <div class="form-group m-b-10" style="text-align:right">
+                            <label class="col-sm-4 control-label">
+                                <label style="color: red">*</label>藏品地址:</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="address" name="address">
+                            </div>
+                        </div>
+                        <div class="form-group m-b-10" style="text-align:right">
+                            <label class="col-sm-4 control-label">
+                                藏品描述:
+                            </label>
+                            <div class="col-sm-7">
+                                <textarea type="text" rows="7" cols="20" class="form-control" id="describe"
+                                          name="describe">
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group m-b-10" style="text-align:right">
+                            <label class="col-sm-4 control-label">
+                                <label style="color: red">*</label>分类:
+                            </label>
+                            <div class="col-sm-7">
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="type" name="type">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group m-b-10" style="text-align:right">
+                            <label class="col-sm-4 control-label">
+                                选择图片:
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="file" class="form-control" id="image" name="image">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                    <button type="button" class="btn btn-info" onclick="saveForm()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+
+        function getSelectedImageName(inputFileElement) {
+            if (!inputFileElement || !inputFileElement.files || inputFileElement.files.length === 0) {
+                return null; // 没有选择图片文件，返回null
+            }
+            return inputFileElement.files[0].name; // 返回第一个选择的文件的名称
+        }
+        function reset() {
+            //全部清空
+            $('#exampleModalLabel').text('新增藏品');
+            //id
+            $('#id').val('');
+            //name
+            $('#name').val('');
+            //address
+            $('#address').val('');
+            //describe
+            $('#describe').val('');
+            //显示模态框
+            $('#exampleModal').modal('show')
+        }
+
+        function updateMember(id) {
+            $.ajax({
+                url: '/museum/system/getCollectionById',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    debugger
+                    if (result.code == 200) {
+                        var collection = result.data;
+                        //全部清空
+                        $('#exampleModalLabel').text('修改藏品');
+                        //id
+                        $('#id').val(collection.id);
+                        //name
+                        $('#name').val(collection.name);
+                        //types
+                        $('#type').val(collection.type);
+                        //address
+                        $('#address').val(collection.address);
+                        //describe
+                        $('#describe').val(collection.describe);
+                        //显示模态框
+                        $('#exampleModal').modal('show')
+                    }
+                }
+            });
+        }
+
+        function updateStatus(id) {
+            $.ajax({
+                url: '/museum/system/updateStatus',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.reload();
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function saveForm() {
+            //name
+            var id = $('#id').val();
+            var name = $('#name').val();
+            //address
+            var address = $('#address').val();
+
+            var image =getSelectedImageName(document.getElementById('image'));
+            var describe = $('#describe').val();
+            var type = $('#type').val();
+
+            if ($.trim(name) === '') {
+                layer.msg("藏品名不能为空");
+                return;
+            }
+            if ($.trim(address) === '') {
+                layer.msg("藏品地址不能为空!");
+                return;
+            }
+            $.ajax({
+                url: '/museum/system/saveCollection',
+                data: {id:id,name:name,address:address,describe:describe,image:image,type:type},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.href = "/museum/system/collectionListUI";
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+</html>

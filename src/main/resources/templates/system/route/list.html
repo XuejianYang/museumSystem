@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{system/base/layout}">
+
+<div layout:fragment="content">
+
+    <div class="container" style="width: 1400px">
+        <h1>博物馆路线管理</h1>
+        <div class="row clearfix">
+            <form name="search-form" class="form-inline m-b-10 clearfix" th:action="@{/system/travelRouteListUI}"
+                  id="search-form">
+            </form>
+
+            <div align="right" style="float:right">
+                <button type="button" onclick="reset()" class="btn btn-default btn-warning">增加</button>
+            </div>
+            <div class="col-md-12 column">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th width="150px">路线名称</th>
+                        <th width="150px">路线地址</th>
+                        <th>路线描述</th>
+                        <th width="100px">点赞</th>
+                        <th width="100px">收藏</th>
+                        <th >操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="travelRoute:${page.content}">
+                        <td th:text="${travelRoute.name}"></td>
+                        <td th:text="${travelRoute.address}"></td>
+                        <td>
+                            <textarea cols="80px" rows="3px" th:text="${travelRoute.describe}"></textarea>
+                        </td>
+                        <!--                        <td th:text="${travelRoute.describe}"></td>-->
+                        <td th:text="${travelRoute.likeNum}"></td>
+                        <td th:text="${travelRoute.preNum}"></td>
+                        <td style="display: flex">
+                            <div align="left" style="float:left ;flex: 1">
+                                <button type="button" th:onclick="updateMember([[${travelRoute.id}]])"
+                                        class="btn btn-default btn-info">修改
+                                </button>
+                            </div>
+
+                            <div align="left" style="float:left ;flex: 1">
+                                <button type="button" th:onclick="commentReset([[${travelRoute.id}]])"
+                                        class="btn btn-default btn-info">评论
+                                </button>
+                            </div>
+                            <div th:if="${travelRoute.status == 0}" align="left">
+                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"
+                                        class="btn btn-default btn-danger">禁用
+                                </button>
+                            </div>
+                            <div th:if="${travelRoute.status == 1}" align="left">
+                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"
+                                        class="btn btn-default btn-success">启用
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <!--评论弹框-->
+                            <div class="modal fade" th:id="${travelRoute.id}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="commentModalLabel"></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!--评论-->
+                                            <div th:each="comment:${travelRoute.commentList}" class="cy-news-grid-item">
+                                                <div class="cy-media-body">
+                                                    <div class="cy-grid-body">
+                                                        <span style=" font-family: PingFang SC, sans-serif;font-weight: 500;color: red;font-size: large "
+                                                                th:text="${comment.userName}+' :'">：</span>
+                                                        <span th:text="${comment.createTime}" style="color: #9499A0;"></span>
+                                                        <span th:text="${comment.content}" style="margin-left: 50px"></span>
+                                                        <button type="button" class=" btn-info" style="float: right" th:onclick="deleteComment([[${comment.id}]])">删除</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--评论-->
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                                            <!--                                        <button type="button" class="btn btn-info" onclick="saveForm()">提交</button>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--评论弹框-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div th:insert="~{base/pageable}"></div>
+        <div class="modal fade" id="exampleModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" name="insertTravelRouteMember"
+                              id="insertTravelRouteMember" class="form-horizontal">
+                            <!--隐藏的-->
+                            <input type="text" id="id" name="id" hidden>
+
+                            <div id="usernameDiv" class="form-group m-b-10" style="text-align:right">
+                                <label class="col-sm-4 control-label">
+                                    <label style="color: red">*</label>路线名:
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="name" name="name">
+                                </div>
+                            </div>
+                            <div class="form-group m-b-10" style="text-align:right">
+                                <label class="col-sm-4 control-label">
+                                    <label style="color: red">*</label>路线地址:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="address" name="address">
+                                </div>
+                            </div>
+                            <div class="form-group m-b-10" style="text-align:right">
+                                <label class="col-sm-4 control-label">
+                                    路线描述:
+                                </label>
+                                <div class="col-sm-7">
+                                <textarea type="text" rows="7" cols="20" class="form-control" id="describe"
+                                          name="describe">
+                                </textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                        <button type="button" class="btn btn-info" onclick="saveForm()">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--弹框-->
+    <script th:inline="javascript">
+        function reset() {
+            //全部清空
+            $('#exampleModalLabel').text('新增路线');
+            //id
+            $('#id').val('');
+            //name
+            $('#name').val('');
+            //address
+            $('#address').val('');
+            //describe
+            $('#describe').val('');
+            //collectNumber
+            $('#collectNumber').val(0);
+            //显示模态框
+            $('#exampleModal').modal('show')
+        }
+        function commentReset(ids) {
+            //全部清空
+            $('#commentModalLabel').text('评论列表');
+            //id
+
+            $('#'+ids).modal('show')
+            //显示模态框
+            // $('#commentModal').modal('show')
+        }
+
+        function updateMember(id) {
+            $.ajax({
+                url: '/museum/system/getTravelRouteById',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 200) {
+                        var travelRoute = result.data;
+                        //全部清空
+                        $('#exampleModalLabel').text('修改路线');
+                        //id
+                        $('#id').val(travelRoute.id);
+                        //name
+                        $('#name').val(travelRoute.name);
+                        //address
+                        $('#address').val(travelRoute.address);
+                        //describe
+                        $('#describe').val(travelRoute.describe);
+                        //显示模态框
+                        $('#exampleModal').modal('show')
+                    }
+                }
+            });
+        }
+        function updatePassword(id) {
+            $.ajax({
+                url: '/museum/comment/getCommentById',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 200) {
+                        var user = result.data;
+                        //全部清空
+                        $('#exampleModalLabel').text('修改密码');
+                        //id
+                        $('#id').val(user.id);
+                        //username
+                        $('#username').val(user.username);
+                        //password
+                        $('#password').val(user.password);
+                        //name
+                        $('#name').val(user.name);
+                        //显示模态框
+                        $('#exampleModal').modal('show')
+                    }
+                }
+            });
+        }
+
+        function updateTravelRouteStatus(id) {
+            $.ajax({
+                url: '/museum/system/updateTravelRouteStatus',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.reload();
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function saveForm() {
+            //name
+            var name = $('#name').val();
+            //address
+            var address = $('#address').val();
+
+
+            if ($.trim(name) === '') {
+                layer.msg("路线名不能为空");
+                return;
+            }
+            if ($.trim(address) === '') {
+                layer.msg("路线地址不能为空!");
+                return;
+            }
+            $.ajax({
+                url: '/museum/system/saveTravelRoute',
+                data: $("#insertTravelRouteMember").serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.href = "/museum/system/travelRouteListUI";
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function deleteComment(id){
+            $.ajax({
+                url: '/museum/system/deleteComment',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.reload();
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+</html>

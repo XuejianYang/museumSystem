@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{base/layout}">
+<div layout:fragment="content">
+    <!--slider section-->
+    <div class="slider_wrapper" style="height: 410px;">
+        <div class="slider-pro" id="my-slider">
+            <div class="sp-slides" style="height:800px ">
+
+                <div class="sp-slide" style="margin-top: 72px">
+                    <div class="sp-layer sp-black sp-padding hide-small-screen" data-width="80%" data-position="left"
+                         data-horizontal="8%" data-vertical="25%" data-show-transition="right"
+                         data-hide-transition="right"
+                         data-show-delay="800" data-hide-delay="100">
+                        <img th:src="@{/images/jingdian_01.jpg}" width="100%" height="100%">
+                    </div>
+                </div>
+
+                <div class="sp-slide" style="margin-top: 140px">
+                    <div class="sp-layer sp-black sp-padding hide-small-screen" data-width="80%" data-position="left"
+                         data-horizontal="8%" data-vertical="25%" data-show-transition="right"
+                         data-hide-transition="right"
+                         data-show-delay="800" data-hide-delay="100">
+                        <img th:src="@{/images/ggg.jpg}" width="100%">
+
+                    </div>
+                </div>
+
+                <div class="sp-slide" style="margin-top: 72px">
+                    <div class="sp-layer sp-black sp-padding hide-small-screen" data-width="80%" data-position="left"
+                         data-horizontal="8%" data-vertical="25%" data-show-transition="right"
+                         data-hide-transition="right"
+                         data-show-delay="800" data-hide-delay="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-page-container">
+        <div class="container">
+            <div class="row med_toppadder30">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="cy-title" style="text-align: center">
+                        <h2>藏品推荐</h2>
+                        <div class="pull-right">
+                            <div class="main-tabs">
+                                <ul class="nav nav-tabs">
+                                    <li>
+                                        <a th:href="@{/reserve/reserveCollectionListUI}">更多 <i
+                                                class="fa fa-angle-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-cont">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="c01">
+                                <div id="oc-news" class="owl-carousel owl-theme">
+                                    <div th:each="collection:${top10Collection}" class="item">
+                                        <div class="cy-news-post clearfix">
+                                            <div class="entry-image">
+                                                <a th:href="@{/reserve/collectionDetailsUI(id=${collection.id})}"><img
+                                                        class="image_fade"
+                                                        th:src="@{'/images/'+ ${collection.image} +'.jpg'}"
+                                                        alt="Image"></a>
+                                            </div>
+                                            <div class="entry-title">
+                                                <h4><a th:href="@{/reserve/collectionDetailsUI(id=${collection.id})}"
+                                                       data-toggle="tooltip"
+                                                       data-container="body"
+                                                       th:title="${collection.name}" th:text="${collection.name}"></a>
+                                                </h4>
+                                            </div>
+                                            <div class="entry-content">
+                                                <p th:text="${collection.describe}">
+                                                </p>
+                                            </div>
+                                            <ul class="entry-meta clearfix">
+                                                <li th:text="${#calendars.format(collection.createDate,'yyyy-MM-dd')}"><i
+                                                        class="fa fa-calendar"></i></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--博物馆简介-->
+            <div style="width: 1140px;height: 400px;margin:10px 0px 50px 0px;background-color: #FFFFFF">
+                <div>
+                    <a th:href="@{/about}"><img src="images/index-jianjie.jpg" alt="" style="float: right"></a>
+                </div>
+                <div style="width: 540px;height: 400px;background-color: #6A6B64;float: left;color:#FAFCFF">
+                    <div style="width: 500px;height: 360px;margin: 20px;font-size: 15px">
+                        <h2 style="font-size: 18px;text-align: center">博物馆简介</h2>
+                        <p>2018年6月1日，是博物馆成立一百周年纪念日。博物馆是代表国家收藏、研究、展示、阐释中华文化代表性物证的最高历史文化艺术殿堂，负有留存民族集体记忆、传承国家文化基因、促进文明交流互鉴的重要使命，也是国家文化客厅。 </p>
+                        <p>现在的博物馆，无论是体现着先进理念的建筑外观，还是重新架构的展览陈列，无不散发着一座大型现代化博物馆的新鲜气息。</p>
+                        <p>在这新鲜的身影背后是其长达100年的历史足迹。</p>
+                        <p>追溯其源，博物馆是由上世纪天津文博、社教、美术、博览四个系列的馆、院汇集而成。</p>
+                        <p>自二十世纪早期至40年代，由于时局动荡，天津文教机构虽为数不多，但几经变革，很难平稳顺利的发展。</p>
+                        <p>发展史的前几十年可谓曲折多变。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row med_bottompadder30">
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="cy-title">
+                        <h2>展览推荐</h2>
+                        <div class="pull-right">
+                            <div class="main-tabs">
+                                <a th:href="@{/reserve/reserveExhibitionListUI}">更多 <i
+                                        class="fa fa-angle-right"></i></a>
+                                </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-cont">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="cp01">
+                                <div id="oc-kx" class="owl-carousel owl-theme">
+                                    <div th:each="exhibition:${top10Exhibition}" class="item">
+                                        <div class="cy-kx-post clearfix">
+                                            <a th:href="@{/reserve/ExhibitionDetailsUI(id=${exhibition.id})}">
+                                                <div class="entry-image">
+                                                    <img th:src="@{'/images/'+ ${exhibition.image} +'.jpg'}"
+                                                         alt="Image">
+                                                </div>
+                                                <div class="entry-content">
+                                                    <p th:text="${exhibition.name}"></p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--热门资讯-->
+                    <div class="cy-title">
+                        <h2>热门资讯</h2>
+                        <div class="pull-right">
+                            <div class="main-tabs">
+                                <ul class="nav nav-tabs">
+                                    <li>
+                                        <a th:href="@{/strategy/travelStrategyListUI}">更多 <i
+                                                class="fa fa-angle-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="main-cy-thesis">
+                        <li th:each="strategy:${top10Strategy}"><a
+                                th:href="@{/strategy/travelStrategyDetailsUI(id=${strategy.id})}"
+                                data-toggle="tooltip" data-container="body"
+                                th:title="${strategy.title}" th:text="${strategy.title}">xxxxxxxxxxxx</a>
+                        </li>
+                    </ul>
+                    <!--热门路线-->
+                    <div class="cy-title">
+                        <h2>热门路线</h2>
+                        <div class="pull-right">
+                            <div class="main-tabs">
+                                <ul class="nav nav-tabs">
+                                    <li>
+                                        <a th:href="@{/route/travelRouteListUI}">更多 <i
+                                                class="fa fa-angle-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="main-cy-thesis">
+                        <li th:each="route:${top10Route}"><a th:href="@{/route/travelRouteDetailsUI(id=${route.id})}"
+                                                             data-toggle="tooltip" data-container="body"
+                                                             th:title="${route.name}" th:text="${route.name}">xxxxxxxxxxxx</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--开放信息-->
+                <!--联系我们-->
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <div class="cy-title">
+                        <h2>开放信息</h2>
+                    </div>
+                    <ul class="cy-contact" style="font-size: 16px">
+                        <li><b>开放时间：</b>周二至周日9：00-17：00（16:00停止进馆）</li>
+                        <li><b>参观方法：</b>凭有效证件于南门或北门票务处现场领票参观。</li>
+                        <li>
+                            <b>交通路线：</b>乘坐BRT5路、K115路、K119路、K139路、K145路、K152路、K160路、K171路公交车，省博物馆站下车。</p>
+                        </li>
+                        <li><b>温馨提示：</b>周一闭馆，可提前进行预约</li>
+                    </ul>
+
+                    <div style="width: 300px;height: 120px;margin: 40px 0px 30px 0px">
+                        <div style="width: 300px;height: 80px;margin-bottom:10px;padding:30px;font-size: 30px;color: #2a929b">
+                            <a th:href="@{/reserve/yuyueUI}">>>立即预约</a>
+
+                        </div>
+                        <p style="color: #757575;font-size: 15px">足不出户,快速预订参观门票</p>
+                    </div>
+
+                    <div class="cy-title">
+                        <h2>联系我们</h2>
+                    </div>
+                    <ul class="cy-contact">
+                        <li><i class="fa fa-map-marker"></i> 地址：北京东城区东长安街16号</li>
+                        <li><i class="fa fa-compass"></i> 邮编：10000</li>
+                        <li><i class="fa fa-phone"></i> 电话：158XXXX8644</li>
+                        <li><i class="fa fa-envelope"></i> 电子邮箱：9377XXXXX@qq.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--main section end-->
+    <script src="js/jquery_min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="plugins/slider-pro/js/jquery.sliderPro.min.js"></script>
+    <script src="plugins/owlcarousel/js/owl.carousel.min.js"></script>
+    <script src="js/custom.js"></script>
+    <!--js code-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#my-slider').sliderPro({
+                arrows: true,
+                waitForLayers: true,
+                autoplay: false,
+                fade: true,
+                buttons: false,
+                autoScaleLayers: false,
+                width: 1170,
+                height: 400
+            });
+            $('.image_fade').hover(function () {
+                $(this).filter(':not(:animated)').animate({opacity: 0.8}, 400);
+            }, function () {
+                $(this).animate({opacity: 1}, 400);
+            });
+            $("#oc-news").owlCarousel({
+                margin: 30,
+                nav: true,
+                loop: true,
+                // autoplay:true,
+                // autoplayTimeout:6000,
+                // autoplayHoverPause: true,
+                dots: false,
+                navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+                responsive: {
+                    0: {items: 1},
+                    480: {items: 2},
+                    768: {items: 3},
+                    992: {items: 4}
+                }
+            });
+            $("#oc-kx").owlCarousel({
+                margin: 15,
+                nav: true,
+                loop: true,
+                // autoplay:true,
+                // autoplayTimeout:5000,
+                // autoplayHoverPause: true,
+                dots: false,
+                navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+                responsive: {
+                    0: {items: 1},
+                    480: {items: 2},
+                    768: {items: 3},
+                    992: {items: 4}
+                }
+            });
+
+            setInterval(function () {
+                var buy = $('.sp-previous-arrow')[0];//给你的a标签加一个id :btnBuy
+                buy.click();
+            }, 5000)//后面的500是以毫秒为单位。
+        });
+    </script>
+</div>
+</html>

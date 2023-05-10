@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{base/layout}">
+
+<div layout:fragment="content">
+    <!--header wrapper end-->
+    <!--med_tittle_section-->
+    <div class="med_tittle_section">
+        <div class="med_img_overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="med_tittle_cont_wrapper">
+                        <div class="med_tittle_cont">
+                            <ol class="breadcrumb">
+                                <li><a th:href="@{/}">首页</a></li>
+                                <li><a th:href="@{/reserve/reserveExhibitionListUI}">常设展览</a></li>
+                                <li>展览详情</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- med_tittle_section End -->
+    <!--service section start-->
+    <div class="page-container">
+        <div class="container">
+            <!--评论弹框-->
+            <div class="modal fade" id="exampleModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" name="insertPassword"
+                                  id="insertPassword" class="form-horizontal">
+                                <!--隐藏的-->
+                                <input type="text" id="id" name="id" hidden>
+                                <div class="form-group m-b-10" style="text-align:right">
+                                    <label class="col-sm-4 control-label"><label
+                                            style="color: red">*</label>评论:</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" id="content" name="content">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                            <button type="button" class="btn btn-info"
+                                    th:onclick=userComment([[${exhibition.id}]],'评论',)>提交
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row med_toppadder50 med_bottompadder50">
+                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                    <div class="news-detail-box">
+                        <h3 th:text="${exhibition.name}"></h3>
+                        <div class="author-info">
+                            <span>展示时间：<span
+                                    th:text="${exhibition.startDate}"></span></span>
+                            <span>位置：<span th:text="${exhibition.address}"></span></span>
+<!--                            <span>浏览次数：13</span>-->
+                        </div>
+                        
+                        <div class="reserve-image" th:each="img:${images}">
+                            <div style="display: flex;flex-wrap: nowrap;margin:10px">
+                                <div style="flex: 1">
+                                    <img th:src="@{'/images/'+ ${img} +'.jpg'}" width="250px" height="200px"
+                                         class="image_fade" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="news-detail-content">
+                            <p th:text="${exhibition.describe}">
+                            </p>
+                            <div align="right" style="float:right">
+                                <button th:onclick="like([[${exhibition.id}]],'点赞')"
+                                        type="button" class="btn btn-default btn-info">(<span th:text="${numb}"></span>)点赞
+                                </button>
+                                <button th:if="${flag == false}"
+                                        th:onclick="cancelExhibitionReserve([[${exhibition.id}]],'收藏')"
+                                        type="button" class="btn btn-default btn-info">收藏
+                                </button>
+                                <button th:if="${flag == true }"
+                                        th:onclick="cancelExhibitionReserve([[${exhibition.id}]],'取消收藏')"
+                                        type="button" class="btn btn-default btn-info">
+                                    取消收藏
+                                </button>
+                                <button th:onclick="reset()" type="button" class="btn btn-default btn-info">评论
+                                </button>
+
+                            </div>
+                            <!--评论--><br><br>
+                            <div th:each="comment:${commentList}" class="cy-news-grid-item">
+                                <div class="cy-media-body">
+                                    <div class="cy-grid-body">
+                                        <span th:text="${comment.userName}">：</span>
+                                        <span th:text="${comment.createTime}"></span>
+                                        <small th:text="${comment.content}"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--评论-->
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    <div class="sider-card">
+                        <div class="sider-card-header">
+                            <h3>热门展览</h3>
+                        </div>
+                        <ul class="sider-list-model-a">
+                            <li th:each="exhibition:${top10Exhibition}">
+                                <a th:href="@{/reserve/ExhibitionDetailsUI(id=${exhibition.id})}"
+                                   th:text="${exhibition.name}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="sider-card">
+                        <div class="sider-card-header">
+                            <h3>热门藏品</h3>
+                        </div>
+                        <ul class="sider-list-model-b">
+                            <li th:each="collection:${top10Collection}">
+                                <a th:href="@{/reserve/collectionDetailsUI(id=${collection.id})}" th:text="${collection.name}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--service section end-->
+    <script th:inline="javascript">
+        function cancelExhibitionReserve(id, str) {
+            $.ajax({
+                url: '/museum/reserve/cancelExhibitionReserve',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        if (str == '收藏') {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        } else {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        }
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function like(id, str) {
+            $.ajax({
+                url: '/museum/like/save',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        if (str == '点赞') {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        }
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+
+        function reset() {
+            //全部清空
+            $('#exampleModalLabel').text('新增评论');
+            $('#content').val('');
+            //显示模态框
+            $('#exampleModal').modal('show')
+        }
+
+        function userComment(id, str) {
+            $("#content")
+            $.ajax({
+                url: '/museum/comment/save',
+                data: {"itemId": id, "content": $("#content").val()},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        if (str == '评论') {
+                            // confirm(str + "成功!"); //在页面上弹出对话框
+                            window.location.reload();
+                        }
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+
+</html>
+S

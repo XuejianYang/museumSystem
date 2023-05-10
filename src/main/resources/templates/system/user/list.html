@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{system/base/layout}">
+<div layout:fragment="content">
+
+    <div class="container" style="width: 1400px">
+        <h1>用户管理</h1>
+        <div class="row clearfix">
+            <form name="search-form" class="form-inline m-b-10 clearfix" th:action="@{/system/userListUI}"
+                  id="search-form">
+            </form>
+<!--            <div align="right" style="float:right">-->
+<!--                <button type="button" onclick="reset()" class="btn btn-default btn-warning">增加</button>-->
+<!--            </div>-->
+            <div class="col-md-12 column">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>密码</th>
+                        <th>姓名</th>
+                        <th>身份证</th>
+                        <th>手机号</th>
+                        <th>头像</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user:${page.content}">
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.password}"></td>
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.card}"></td>
+                        <td th:text="${user.tel}"></td>
+                        <td><img width="60px" height="60px" th:src="@{'/images/'+ ${user.img} +'.jpg'}"></td>
+                        <td>
+                            <div align="left" style="float:left">
+                                <button type="button" th:onclick="updatePassword([[${user.id}]])"
+                                        class="btn btn-default btn-info">修改
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <div align="left" style="float:left">
+                                <button type="button" th:onclick="updateUserForm([[${user.id}]])"
+                                        class="btn btn-default btn-danger">删除
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div th:insert="~{base/pageable}"></div>
+        <!--弹框-->
+        <div class="modal fade" id="exampleModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" name="insertPassword"
+                              id="insertPassword" class="form-horizontal">
+                            <!--隐藏的-->
+                            <input type="text" id="id" name="id" hidden>
+                            <div class="form-group m-b-10" style="text-align:right">
+                                <label class="col-sm-4 control-label">
+                                    <label style="color: red">*</label>用户名:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="username" name="username">
+                                </div>
+                            </div>
+                            <div class="form-group m-b-10" style="text-align:right">
+                                <label class="col-sm-4 control-label">
+                                    <label style="color: red">*</label>密码:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="password" name="password">
+                                </div>
+                            </div>
+                            <div class="form-group m-b-10" style="text-align:right">
+                                <label class="col-sm-4 control-label">
+                                    <label style="color: red">*</label>姓名:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="name" name="name">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                        <button type="button" class="btn btn-info" onclick="saveForm()">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+
+        function reset() {
+            //全部清空
+            $('#exampleModalLabel').text('新增用户');
+            //id
+            // $('#id').val('');
+            //name
+            $('#name').val('');
+            //username
+            $('#username').val('');
+            //password
+            $('#password').val('');
+            //显示模态框
+            $('#exampleModal').modal('show')
+        }
+        function updatePassword(id) {
+            $.ajax({
+                url: '/museum/system/getUserById',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 200) {
+                        var user = result.data;
+                        //全部清空
+                        $('#exampleModalLabel').text('修改密码');
+                        //id
+                        $('#id').val(user.id);
+                        //username
+                        $('#username').val(user.username);
+                        //password
+                        $('#password').val(user.password);
+                        //name
+                        $('#name').val(user.name);
+                        //显示模态框
+                        $('#exampleModal').modal('show')
+                    }
+                }
+            });
+        }
+
+        function saveForm() {
+            //password
+            var password = $('#password').val();
+
+            if ($.trim(password) === '') {
+                layer.msg("密码不能为空");
+                return;
+            }
+            //userName
+            var username = $('#username').val();
+            if ($.trim(username) === '') {
+                layer.msg("用户名不能为空");
+                return;
+            }
+            //name
+            var name = $('#name').val();
+
+            if ($.trim(name) === '') {
+                layer.msg("姓名不能为空");
+                return;
+            }
+
+
+            $.ajax({
+                url: '/museum/system/saveUser',
+                data: $("#insertPassword").serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.href = "/museum/system/userListUI";
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+        function updateUserForm(id) {
+            $.ajax({
+                url: '/museum/system/deleteUser',
+                // data: $("#insertPassword").serialize(),
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        layer.open({
+                            title: '',
+                            content: result.message,
+                            end : function() {
+                                window.location.href = "/museum/system/userListUI";
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+</html>
