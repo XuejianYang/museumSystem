@@ -107,7 +107,6 @@
     <!--service section end-->
     <script th:inline="javascript">
         function cancelExhibitionReserve(id, str) {
-            debugger
             $.ajax({
                 url: '/museum/reserve/cancelExhibitionReserve',
                 data: {"id": id},
@@ -133,7 +132,6 @@
         }
 
         function like(id, str) {
-            debugger
             $.ajax({
                 url: '/museum/like/save',
                 data: {"id": id},
@@ -164,7 +162,6 @@
         }
 
         function userComment(id, str) {
-            debugger
             $("#content")
             $.ajax({
                 url: '/museum/comment/save',

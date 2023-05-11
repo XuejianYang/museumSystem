@@ -33,6 +33,9 @@ public class TravelRoute {
     @Column(name = "update_date")
     private Date updateDate;
 
+    @Column(name = "error_message")
+    private String errorMessage;
+
     @Transient
     private Integer likeNum;
     @Transient
@@ -95,4 +98,12 @@ public class TravelRoute {
     public Date getUpdateDate() { return updateDate; }
 
     public void setUpdateDate(Date updateDate) { this.updateDate = updateDate; }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }

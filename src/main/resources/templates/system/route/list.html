@@ -49,15 +49,28 @@
                                         class="btn btn-default btn-info">评论
                                 </button>
                             </div>
-<!--                            <div th:if="${travelRoute.status == 0}" align="left">-->
-<!--                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"-->
-<!--                                        class="btn btn-default btn-danger">禁用-->
-<!--                                </button>-->
-<!--                            </div>-->
+                            <div th:if="${travelRoute.status == 0}" align="left">
+                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"
+                                        class="btn btn-default btn-danger">禁用
+                                </button>
+                            </div>
+                            <div th:if="${travelRoute.status == 1}" align="left">
+                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"
+                                        class="btn btn-default btn-success">启用
+                                </button>
+                            </div>
 <!--                            <div th:if="${travelRoute.status == 1}" align="left">-->
-<!--                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"-->
-<!--                                        class="btn btn-default btn-success">启用-->
-<!--                                </button>-->
+<!--                                <button type="button" th:onclick="updateTravelStrategyStatus([[${travelRoute.id}]])"-->
+<!--                                        class="btn btn-default btn-success">审核通过</button>-->
+<!--                                <button type="button" th:onclick="updateError([[${travelRoute.id}]])"-->
+<!--                                        class="btn btn-default btn-danger">审核不通过</button>-->
+<!--                            </div>-->
+<!--                            <div th:if="${travelRoute.status == 0}" align="left">-->
+<!--                                <button type="button"  class="btn btn-default btn-success">审核已经通过</button>-->
+<!--                            </div>-->
+<!--                            <div th:if="${travelRoute.status == 2}" align="left">-->
+<!--                                <button type="button"  class="btn btn-default btn-danger">未通过审核</button>-->
+<!--                                <button type="button" th:onclick="updateTravelStrategyStatus([[${travelRoute.id}]])" class="btn btn-default btn-success">重新审核</button>-->
 <!--                            </div>-->
 
                         </td>
@@ -153,7 +166,7 @@
             </div>
         </div>
     </div>
-    <!--弹框-->
+    <!--新增路线弹框-->
     <script th:inline="javascript">
         function reset() {
             //全部清空
@@ -174,11 +187,7 @@
         function commentReset(ids) {
             //全部清空
             $('#commentModalLabel').text('评论列表');
-            //id
-
             $('#'+ids).modal('show')
-            //显示模态框
-            // $('#commentModal').modal('show')
         }
 
         function updateMember(id) {
@@ -202,6 +211,47 @@
                         $('#describe').val(travelRoute.describe);
                         //显示模态框
                         $('#exampleModal').modal('show')
+                    }
+                }
+            });
+        }
+        function updateTravelStrategyStatus(id) {
+            $.ajax({
+                url: '/museum/system/updateTravelRouteStatus',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.reload();
+                    } else {
+                        layer.open({
+                            title: '错误提示',
+                            content: result.message
+                        });
+                    }
+                }
+            })
+        }
+        function updateError(id) {
+            $.ajax({
+                url: '/museum/system/getTravelRouteById',
+                data: {"id": id},
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.code == 200) {
+                        var travelRoute = result.data;
+                        //全部清空
+                        $('#checkModalLabel').text('修改攻略');
+                        //id
+                        $('#id').val(travelRoute.id);
+                        //describe
+                        $('#describe').val(travelRoute.describe);
+                        //errorMessage
+                        $('#errorMessage').val(travelRoute.errorMessage);
+                        //显示模态框
+                        $('#checkModal').modal('show')
                     }
                 }
             });

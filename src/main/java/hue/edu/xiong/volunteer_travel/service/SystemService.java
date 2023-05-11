@@ -95,8 +95,9 @@ public class SystemService {
     @Transactional(rollbackFor = Exception.class)
     public Result saveUser(User user) {
 
-        System.out.println(user.getId());
 
+        String images = user.getImg();
+        user.setImg(images.substring(0,images.lastIndexOf(".")));
 
         if (StringUtils.isEmpty(user.getId())) {//没有id的情况
             user.setId(IdGenerator.id());
@@ -210,10 +211,9 @@ public class SystemService {
         } else {
             //有id的情况
             Exhibition oldExhibition = getExhibitionById(exhibition.getId());
+            String images = exhibition.getImage();
+            exhibition.setImage(images.substring(0,images.lastIndexOf(".")));
             exhibition.setCreateDate(oldExhibition.getCreateDate());
-            exhibition.setImage(oldExhibition.getImage());
-            exhibition.setStartDate(exhibition.getStartDate());
-            exhibition.setStatus(exhibition.getStatus());
         }
         exhibitionRepository.saveAndFlush(exhibition);
         return ResultGenerator.genSuccessResult();
