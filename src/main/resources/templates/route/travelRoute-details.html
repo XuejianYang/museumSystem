@@ -64,7 +64,10 @@
                         <div class="author-info">
                             <span th:text="${#calendars.format(travelRoute.createDate,'yyyy-MM-dd')}"></span>
                             <span>所在地：<span th:text="${travelRoute.address}"></span></span>
-<!--                            <span>浏览次数：13</span>-->
+                            <div class="entry-image">
+                                <img th:src="@{'/images/'+ ${travelRoute.image} +'.jpg'}"
+                                     alt="Image">
+                            </div>
                         </div>
                         <div class="news-detail-content">
                             <p th:text="${travelRoute.describe}">

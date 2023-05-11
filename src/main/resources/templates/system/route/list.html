@@ -156,6 +156,15 @@
                                 </textarea>
                                 </div>
                             </div>
+                            <div class="form-group m-b-10" style="text-align:right">
+                                <label class="col-sm-4 control-label">
+                                    选择图片:
+                                </label>
+                                <div class="col-sm-7">
+                                    <input type="file" class="form-control" id="image" name="image">
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -233,6 +242,12 @@
                 }
             })
         }
+        function getSelectedImageName(inputFileElement) {
+            if (!inputFileElement || !inputFileElement.files || inputFileElement.files.length === 0) {
+                return null; // 没有选择图片文件，返回null
+            }
+            return inputFileElement.files[0].name; // 返回第一个选择的文件的名称
+        }
         function updateError(id) {
             $.ajax({
                 url: '/museum/system/getTravelRouteById',
@@ -304,10 +319,10 @@
         function saveForm() {
             //name
             var name = $('#name').val();
-            //address
             var address = $('#address').val();
-
-
+            var id = $('#id').val();
+            var describe = $('#describe').val();
+            var image = getSelectedImageName(document.getElementById('image'));
             if ($.trim(name) === '') {
                 layer.msg("路线名不能为空");
                 return;
@@ -318,7 +333,7 @@
             }
             $.ajax({
                 url: '/museum/system/saveTravelRoute',
-                data: $("#insertTravelRouteMember").serialize(),
+                data: {id:id,name:name,image:image,address:address,describe:describe},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {
