@@ -71,17 +71,7 @@
                             <span>位置：<span th:text="${exhibition.address}"></span></span>
 <!--                            <span>浏览次数：13</span>-->
                         </div>
-                        
-                        <div class="reserve-image" th:each="img:${images}">
-                            <div style="display: flex;flex-wrap: nowrap;margin:10px">
-                                <div style="flex: 1">
-                                    <img th:src="@{'/images/'+ ${img} +'.jpg'}" width="250px" height="200px"
-                                         class="image_fade" alt="">
-                                </div>
-                            </div>
-                        </div>
-
-
+                        <img th:src="@{'/images/'+ ${exhibition.image} +'.jpg'}" class="image_fade" alt="">
                         <div class="news-detail-content">
                             <p th:text="${exhibition.describe}">
                             </p>

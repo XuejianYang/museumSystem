@@ -33,11 +33,11 @@
                     <div class="filter-type-box cy-tabs">
                         <ul class="nav nav-tabs mb-10">
                             <li class="active">
-                                <a th:href="@{/strategy/travelStrategyListUI}"><i class="fa"></i>资讯</a>
+                                <a th:href="@{/information/InformationListUI}"><i class="fa"></i>资讯</a>
                             </li>
                             <li class="pull-right">
                                 <div class="search-tags">
-                                    <form th:action="@{/strategy/travelStrategyListUI}" methed="post" name="search-form"
+                                    <form th:action="@{/information/InformationListUI}" methed="post" name="search-form"
                                           id="search-form" class="form-inline">
                                         <div class="input-group">
                                             <input type="text" name="searchName" th:value="${searchName}"
@@ -53,17 +53,17 @@
                         </ul>
                     </div>
 
-                    <div th:each="travelStrategy:${page.content}" class="cy-news-grid-item">
+                    <div th:each="information:${page.content}" class="cy-news-grid-item">
                         <div class="cy-media-body">
                             <div class="cy-grid-body">
                                 <div class="time" style="width:84px;height: 84px;background: #f2f2f2;
                                 color:#666;float: left;display: flex;align-items: center;flex-direction: column;
                                 justify-content: center;margin-right:10px">
                                     <p>13</p><span>2028/08</span></div>
-<!--                                <p>13</p><span th:text="${travelStrategy.createDate}"></span></div>-->
-                                <h5><a th:href="@{/strategy/travelStrategyDetailsUI(id=${travelStrategy.id})}"
-                                       th:text="'资讯名称 : ' + ${travelStrategy.title}"></a></h5>
-                                <small th:text="${travelStrategy.describe}">
+<!--                                <p>13</p><span th:text="${information.createDate}"></span></div>-->
+                                <h5><a th:href="@{/information/InformationDetailsUI(id=${information.id})}"
+                                       th:text="'资讯名称 : ' + ${information.title}"></a></h5>
+                                <small th:text="${information.describe}">
 
                                 </small>
                             </div>
@@ -84,9 +84,9 @@
                             <h3>热门资讯</h3>
                         </div>
                         <ul class="sider-list-model-a">
-                            <li th:each="travelStrategy:${top10Strategy}">
-                                <a th:href="@{/strategy/travelStrategyDetailsUI(id=${travelStrategy.id})}"
-                                   th:text="${travelStrategy.title}">XXXX</a>
+                            <li th:each="information:${top10Strategy}">
+                                <a th:href="@{/information/InformationDetailsUI(id=${information.id})}"
+                                   th:text="${information.title}">XXXX</a>
                             </li>
                         </ul>
                     </div>

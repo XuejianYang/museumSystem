@@ -2,15 +2,12 @@ package hue.edu.xiong.volunteer_travel.service;
 
 import hue.edu.xiong.volunteer_travel.core.Result;
 import hue.edu.xiong.volunteer_travel.core.ResultGenerator;
-import hue.edu.xiong.volunteer_travel.core.ServiceException;
-import hue.edu.xiong.volunteer_travel.enums.StatusEnum;
 import hue.edu.xiong.volunteer_travel.model.*;
 import hue.edu.xiong.volunteer_travel.repository.*;
 import hue.edu.xiong.volunteer_travel.util.CookieUitl;
 import hue.edu.xiong.volunteer_travel.util.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +24,7 @@ import java.util.List;
 public class CommentService {
 
     @Autowired
-    private TravelStrategyRepository travelStrategyRepository;
+    private InformationRepository informationRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -38,7 +35,7 @@ public class CommentService {
 
     public Page<UserComment> findCommentByNameAndUserId(String content, Pageable pageable) {
         //查询通过后台审核的攻略列表
-        Page<UserComment> travelStrategyPage = userCommentRepository.findAll((root, query, cb) -> {
+        Page<UserComment> InformationPage = userCommentRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add((cb.equal(root.get("status"), 0)));
             //攻略name模糊查询
@@ -49,7 +46,7 @@ public class CommentService {
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return travelStrategyPage;
+        return InformationPage;
     }
 
 
@@ -57,7 +54,7 @@ public class CommentService {
 
 
 //    @Transactional(rollbackFor = Exception.class)
-//    public Result travelStrategyLike(HttpServletRequest request, String id) {
+//    public Result InformationLike(HttpServletRequest request, String id) {
 //        Cookie cookie = CookieUitl.get(request, "username");
 //        if (cookie == null) {
 //            return ResultGenerator.genFailResult("用户没有登录!");

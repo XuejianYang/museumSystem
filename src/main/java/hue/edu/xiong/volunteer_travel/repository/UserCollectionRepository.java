@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface UserCollectionRepository extends JpaRepository<UserCollection, String>, JpaSpecificationExecutor<UserCollection> {
-    List<UserCollection> findUserHotelsByUser(User user);
+    List<UserCollection> findUserCollectionsByUser(User user);
 
     UserCollection findUserCollectionByCollectionAndUser(Collection collection, User user);
 

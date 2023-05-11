@@ -49,17 +49,19 @@
                                         class="btn btn-default btn-info">评论
                                 </button>
                             </div>
-                            <div th:if="${travelRoute.status == 0}" align="left">
-                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"
-                                        class="btn btn-default btn-danger">禁用
-                                </button>
-                            </div>
-                            <div th:if="${travelRoute.status == 1}" align="left">
-                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"
-                                        class="btn btn-default btn-success">启用
-                                </button>
-                            </div>
+<!--                            <div th:if="${travelRoute.status == 0}" align="left">-->
+<!--                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"-->
+<!--                                        class="btn btn-default btn-danger">禁用-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                            <div th:if="${travelRoute.status == 1}" align="left">-->
+<!--                                <button type="button" th:onclick="updateTravelRouteStatus([[${travelRoute.id}]])"-->
+<!--                                        class="btn btn-default btn-success">启用-->
+<!--                                </button>-->
+<!--                            </div>-->
+
                         </td>
+
                         <td>
                             <!--评论弹框-->
                             <div class="modal fade" th:id="${travelRoute.id}">

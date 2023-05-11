@@ -6,7 +6,7 @@ import hue.edu.xiong.volunteer_travel.core.ServiceException;
 import hue.edu.xiong.volunteer_travel.enums.StatusEnum;
 import hue.edu.xiong.volunteer_travel.model.*;
 import hue.edu.xiong.volunteer_travel.repository.LikeRepository;
-import hue.edu.xiong.volunteer_travel.repository.TravelStrategyRepository;
+import hue.edu.xiong.volunteer_travel.repository.InformationRepository;
 import hue.edu.xiong.volunteer_travel.repository.UserRepository;
 import hue.edu.xiong.volunteer_travel.repository.UserStrategyRepository;
 import hue.edu.xiong.volunteer_travel.util.CookieUitl;
@@ -30,7 +30,7 @@ import java.util.List;
 public class StrategyService {
 
     @Autowired
-    private TravelStrategyRepository travelStrategyRepository;
+    private InformationRepository informationRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -41,9 +41,9 @@ public class StrategyService {
     @Autowired
     private UserStrategyRepository userStrategyRepository;
 
-    public Page<TravelStrategy> TravelStrategyListUI(String searchName, Pageable pageable) {
+    public Page<Information> InformationListUI(String searchName, Pageable pageable) {
         //查询通过后台审核的攻略列表
-        Page<TravelStrategy> travelStrategyPage = travelStrategyRepository.findAll((root, query, cb) -> {
+        Page<Information> InformationPage = informationRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             //status状态,查询状态为0,启动的攻略
             predicates.add((cb.equal(root.get("status"), 0)));
@@ -55,17 +55,17 @@ public class StrategyService {
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return travelStrategyPage;
+        return InformationPage;
     }
 
-    public Page<TravelStrategy> PushStrategyListUI(HttpServletRequest request, String searchName, Pageable pageable) {
+    public Page<Information> PushStrategyListUI(HttpServletRequest request, String searchName, Pageable pageable) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
             throw new ServiceException("用户未登录");
         }
         User user = userRepository.findUserByUsername(cookie.getValue());
         //查询通过后台审核的攻略列表
-        Page<TravelStrategy> travelStrategyPage = travelStrategyRepository.findAll((root, query, cb) -> {
+        Page<Information> InformationPage = informationRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             //攻略name模糊查询
             predicates.add((cb.equal(root.get("user"), user)));
@@ -77,19 +77,19 @@ public class StrategyService {
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return travelStrategyPage;
+        return InformationPage;
     }
 
-    public TravelStrategy findTravelStrategyById(String id) {
-        return travelStrategyRepository.findById(id).orElseThrow(() -> new ServiceException("攻略id错误!"));
+    public Information findInformationById(String id) {
+        return informationRepository.findById(id).orElseThrow(() -> new ServiceException("攻略id错误!"));
     }
 
     public Boolean isStrategy(HttpServletRequest request, String id) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie != null) {
             User user = userRepository.findUserByUsername(cookie.getValue());
-            TravelStrategy travelStrategy1 = findTravelStrategyById(id);
-            UserStrategy userStrategy = userStrategyRepository.findUserStrategyByTravelStrategyAndUser(travelStrategy1, user);
+            Information information1 = findInformationById(id);
+            UserStrategy userStrategy = userStrategyRepository.findUserStrategyByInformationAndUser(information1, user);
             //每个路线只能关注一次
             if (userStrategy != null) {
                 return true;
@@ -98,7 +98,7 @@ public class StrategyService {
         return false;
     }
     @Transactional(rollbackFor = Exception.class)
-    public Result travelStrategyLike(HttpServletRequest request, String id) {
+    public Result InformationLike(HttpServletRequest request, String id) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
             return ResultGenerator.genFailResult("用户没有登录!");
@@ -115,7 +115,7 @@ public class StrategyService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Result commentTravelStrategy(HttpServletRequest request, UserComment userComment) {
+    public Result commentInformation(HttpServletRequest request, UserComment userComment) {
 
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
@@ -133,15 +133,15 @@ public class StrategyService {
     }
 //收藏
     @Transactional(rollbackFor = Exception.class)
-    public Result cancelTravelStrategyReserve(HttpServletRequest request, String id) {
+    public Result cancelInformationReserve(HttpServletRequest request, String id) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
             return ResultGenerator.genFailResult("用户没有登录!");
 //            throw new ServiceException("用户没有登录!");
         }
-        TravelStrategy travelStrategy = findTravelStrategyById(id);
+        Information information = findInformationById(id);
         User user = userRepository.findUserByUsername(cookie.getValue());
-        UserStrategy userStrategy = userStrategyRepository.findUserStrategyByTravelStrategyAndUser(travelStrategy, user);
+        UserStrategy userStrategy = userStrategyRepository.findUserStrategyByInformationAndUser(information, user);
         //存在值就是取消预约.不存在值就是预约
         if (userStrategy != null) {
             userStrategyRepository.delete(userStrategy);
@@ -150,13 +150,13 @@ public class StrategyService {
             newUserStrategy.setId(IdGenerator.id());
             newUserStrategy.setCreateDate(new Date());
             newUserStrategy.setUser(user);
-            newUserStrategy.setTravelStrategy(travelStrategy);
+            newUserStrategy.setInformation(information);
             userStrategyRepository.saveAndFlush(newUserStrategy);
         }
         return ResultGenerator.genSuccessResult();
     }
 
-    public List<UserStrategy> getTravelStrategyByUser(HttpServletRequest request) {
+    public List<UserStrategy> getInformationByUser(HttpServletRequest request) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
 //            throw new ServiceException("未能获得正确的用户名");
@@ -166,41 +166,41 @@ public class StrategyService {
         return userStrategyRepository.findUserStrategyByUser(user);
     }
 
-    public TravelStrategy getTravelStrategyById(String id) {
-        TravelStrategy travelStrategy = travelStrategyRepository.findById(id).orElseThrow(() -> new ServiceException("攻略ID错误"));
-        return travelStrategy;
+    public Information getInformationById(String id) {
+        Information information = informationRepository.findById(id).orElseThrow(() -> new ServiceException("攻略ID错误"));
+        return information;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Result saveTravelStrategy(HttpServletRequest request, TravelStrategy travelStrategy) {
+    public Result saveInformation(HttpServletRequest request, Information information) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
             throw new ServiceException("未能获得正确的用户名");
         }
         User user = userRepository.findUserByUsername(cookie.getValue());
 
-        if (StringUtils.isEmpty(travelStrategy.getId())) {//没有id的情况
-            travelStrategy.setId(IdGenerator.id());
-            if (travelStrategy.getStatus() == null) {
+        if (StringUtils.isEmpty(information.getId())) {//没有id的情况
+            information.setId(IdGenerator.id());
+            if (information.getStatus() == null) {
                 //默认为停用
-                travelStrategy.setStatus(StatusEnum.DOWM_STATUS.getCode());
-                travelStrategy.setCreateDate(new Date());
-                travelStrategy.setUser(user);
+                information.setStatus(StatusEnum.DOWM_STATUS.getCode());
+                information.setCreateDate(new Date());
+                information.setUser(user);
             }
         } else {
             //有id的情况
-            TravelStrategy oldTravelStrategy = getTravelStrategyById(travelStrategy.getId());
-            travelStrategy.setStatus(oldTravelStrategy.getStatus());
-            travelStrategy.setCreateDate(oldTravelStrategy.getCreateDate());
+            Information oldInformation = getInformationById(information.getId());
+            information.setStatus(oldInformation.getStatus());
+            information.setCreateDate(oldInformation.getCreateDate());
         }
-        travelStrategyRepository.saveAndFlush(travelStrategy);
+        informationRepository.saveAndFlush(information);
         return ResultGenerator.genSuccessResult();
     }
 
-    public List<TravelStrategy> findTop10Strategy() {
+    public List<Information> findTop10Strategy() {
         PageRequest pageable = PageRequest.of(0, 10);
         //查询启用的游览路线列表
-        Page<TravelStrategy> travelStrategyPage = travelStrategyRepository.findAll((root, query, cb) -> {
+        Page<Information> InformationPage = informationRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             //status状态,查询状态为0,启动的路线
             predicates.add((cb.equal(root.get("status"), 0)));
@@ -208,6 +208,6 @@ public class StrategyService {
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return travelStrategyPage.getContent();
+        return InformationPage.getContent();
     }
 }

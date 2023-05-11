@@ -3,11 +3,8 @@ package hue.edu.xiong.volunteer_travel.service;
 import hue.edu.xiong.volunteer_travel.core.Result;
 import hue.edu.xiong.volunteer_travel.core.ResultGenerator;
 import hue.edu.xiong.volunteer_travel.model.User;
-import hue.edu.xiong.volunteer_travel.model.UserComment;
 import hue.edu.xiong.volunteer_travel.model.UserLike;
 import hue.edu.xiong.volunteer_travel.repository.LikeRepository;
-import hue.edu.xiong.volunteer_travel.repository.TravelStrategyRepository;
-import hue.edu.xiong.volunteer_travel.repository.UserCommentRepository;
 import hue.edu.xiong.volunteer_travel.repository.UserRepository;
 import hue.edu.xiong.volunteer_travel.util.CookieUitl;
 import hue.edu.xiong.volunteer_travel.util.IdGenerator;
@@ -38,7 +35,7 @@ public class LikeService {
 
     public Page<UserLike> findLikeByNameAndUserId(String content, Pageable pageable) {
         //查询通过后台审核的攻略列表
-        Page<UserLike> travelStrategyPage = likeRepository.findAll((root, query, cb) -> {
+        Page<UserLike> InformationPage = likeRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add((cb.equal(root.get("status"), 0)));
             //攻略name模糊查询
@@ -49,7 +46,7 @@ public class LikeService {
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return travelStrategyPage;
+        return InformationPage;
     }
     public Integer findLikeCountByItemId(String id) {
         //查询通过后台审核的攻略列表

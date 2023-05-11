@@ -36,17 +36,17 @@
                             </li>
                         </ul>
                     </div>
-                    <div style="min-height: 150px" class="cy-news-grid-item" th:each="travelStrategy:${page.content}">
+                    <div style="min-height: 150px" class="cy-news-grid-item" th:each="information:${page.content}">
                         <div class="cy-ib-thumbnail pull-left">
                         </div>
                         <div class="booklet-cont">
-                            <h5><a th:href="@{/strategy/travelStrategyDetailsUI(id=${travelStrategy.id})}"
-                                   th:text="'资讯标题: ' + ${travelStrategy.title}"></a></h5>
+                            <h5><a th:href="@{/templates/information/InformationDetailsUI(id=${information.id})}"
+                                   th:text="'资讯标题: ' + ${information.title}"></a></h5>
                             <div class="cy-summary-intro">
-                                <p th:text="${travelStrategy.describe}">
+                                <p th:text="${information.describe}">
                                 </p>
-                                <div align="right" style="float:right" th:if="${travelStrategy.status == 2}">
-                                    <button type="button" th:onclick="aaa([[${travelStrategy.errorMessage}]])"
+                                <div align="right" style="float:right" th:if="${information.status == 2}">
+                                    <button type="button" th:onclick="aaa([[${information.errorMessage}]])"
                                             class="btn btn-default btn-danger">审核不通过,查看原因
                                     </button>
                                 </div>
@@ -111,9 +111,9 @@
     <script th:inline="javascript">
 
 
-        function cancelTravelStrategyReserve(id) {
+        function cancelInformationReserve(id) {
             $.ajax({
-                url: '/museum/strategy/cancelTravelStrategyReserve',
+                url: '/museum/strategy/cancelInformationReserve',
                 data: {"id": id},
                 type: 'post',
                 dataType: 'json',
@@ -189,7 +189,7 @@
                 return;
             }
             $.ajax({
-                url: '/museum/strategy/saveTravelStrategy',
+                url: '/museum/strategy/saveInformation',
                 data: $("#insertMember").serialize(),
                 type: 'post',
                 dataType: 'json',

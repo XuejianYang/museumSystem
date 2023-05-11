@@ -18,7 +18,7 @@ public class UserLikeController {
 
     @RequestMapping("/save")
     @ResponseBody
-    public Result commentTravelStrategy(HttpServletRequest request, String id) {
+    public Result commentInformation(HttpServletRequest request, String id) {
         return likeService.saveLike(request, id);
     }
 

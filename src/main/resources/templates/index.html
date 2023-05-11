@@ -151,7 +151,7 @@
                             <div class="main-tabs">
                                 <ul class="nav nav-tabs">
                                     <li>
-                                        <a th:href="@{/strategy/travelStrategyListUI}">更多 <i
+                                        <a th:href="@{/templates/information/InformationListUI}">更多 <i
                                                 class="fa fa-angle-right"></i></a>
                                     </li>
                                 </ul>
@@ -161,7 +161,7 @@
 
                     <ul class="main-cy-thesis">
                         <li th:each="strategy:${top10Strategy}"><a
-                                th:href="@{/strategy/travelStrategyDetailsUI(id=${strategy.id})}"
+                                th:href="@{/templates/information/InformationDetailsUI(id=${strategy.id})}"
                                 data-toggle="tooltip" data-container="body"
                                 th:title="${strategy.title}" th:text="${strategy.title}">xxxxxxxxxxxx</a>
                         </li>

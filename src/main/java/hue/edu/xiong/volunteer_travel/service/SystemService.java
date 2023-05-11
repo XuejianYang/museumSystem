@@ -43,7 +43,7 @@ public class SystemService {
     private TravelRouteRepository travelRouteRepository;
 
     @Autowired
-    private TravelStrategyRepository travelStrategyRepository;
+    private InformationRepository informationRepository;
 
     @Autowired
     private LikeRepository likeRepository;
@@ -112,14 +112,14 @@ public class SystemService {
     }
 
 
-    public Page<Collection> getHotelPage(Pageable pageable) {
-        Page<Collection> hotelPage = collectionRepository.findAll((root, query, cb) -> {
+    public Page<Collection> getCollectionPage(Pageable pageable) {
+        Page<Collection> CollectionPage = collectionRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             query.where(predicates.toArray(new Predicate[]{}));
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return hotelPage;
+        return CollectionPage;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -132,10 +132,10 @@ public class SystemService {
             collection.setImage(image.substring(0,image.lastIndexOf(".")));
         } else {
             //有id的情况
-            Collection oldHotel = getCollectionById(collection.getId());
-            collection.setStatus(oldHotel.getStatus());
-            collection.setCreateDate(oldHotel.getCreateDate());
-            collection.setImage(oldHotel.getImage());
+            Collection oldCollection = getCollectionById(collection.getId());
+            collection.setStatus(oldCollection.getStatus());
+            collection.setCreateDate(oldCollection.getCreateDate());
+            collection.setImage(oldCollection.getImage());
 
         }
         collectionRepository.saveAndFlush(collection);
@@ -279,83 +279,83 @@ public class SystemService {
         return ResultGenerator.genSuccessResult();
     }
 
-    public Page<TravelStrategy> getTravelStrategyPage(Pageable pageable) {
-        Page<TravelStrategy> travelStrategyPage = travelStrategyRepository.findAll((root, query, cb) -> {
+    public Page<Information> getInformationPage(Pageable pageable) {
+        Page<Information> InformationPage = informationRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-//            predicates.add((cb.equal(root.get("status"), 0)));
+            predicates.add((cb.equal(root.get("status"), 0)));
             query.where(predicates.toArray(new Predicate[]{}));
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return travelStrategyPage;
+        return InformationPage;
     }
 
-    public TravelStrategy getTravelStrategyById(String id) {
-        TravelStrategy travelStrategy = travelStrategyRepository.findById(id).orElseThrow(() -> new ServiceException("攻略ID错误!"));
-        return travelStrategy;
+    public Information getInformationById(String id) {
+        Information information = informationRepository.findById(id).orElseThrow(() -> new ServiceException("攻略ID错误!"));
+        return information;
     }
 
-    public Result updateTravelStrategyStatus(String id) {
-        TravelStrategy travelStrategy = getTravelStrategyById(id);
-        if (travelStrategy.getStatus().equals(StatusEnum.DOWM_STATUS.getCode())) {
+    public Result updateInformationStatus(String id) {
+        Information information = getInformationById(id);
+        if (information.getStatus().equals(StatusEnum.DOWM_STATUS.getCode())) {
             //改变状态
-            travelStrategy.setStatus(StatusEnum.UP_STATUS.getCode());
+            information.setStatus(StatusEnum.UP_STATUS.getCode());
         } else {
-            travelStrategy.setStatus(StatusEnum.DOWM_STATUS.getCode());
+            information.setStatus(StatusEnum.DOWM_STATUS.getCode());
         }
-        travelStrategyRepository.saveAndFlush(travelStrategy);
+        informationRepository.saveAndFlush(information);
         return ResultGenerator.genSuccessResult();
     }
 
-    public Result updateTravelStrategyStatusSH(String id) {
-        TravelStrategy travelStrategy = getTravelStrategyById(id);
-        if (travelStrategy.getStatus().equals(StatusEnum.DOWM_STATUS.getCode())) {
+    public Result updateInformationStatusSH(String id) {
+        Information information = getInformationById(id);
+        if (information.getStatus().equals(StatusEnum.DOWM_STATUS.getCode())) {
             //改变状态
-            travelStrategy.setStatus(StatusEnum.UP_STATUS.getCode());
+            information.setStatus(StatusEnum.UP_STATUS.getCode());
         } else {
-            travelStrategy.setStatus(StatusEnum.DOWM_STATUS.getCode());
+            information.setStatus(StatusEnum.DOWM_STATUS.getCode());
         }
-        travelStrategyRepository.saveAndFlush(travelStrategy);
+        informationRepository.saveAndFlush(information);
         return ResultGenerator.genSuccessResult();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Result adminSaveTravelStrategy(TravelStrategy travelStrategy) {
-        travelStrategy.setId(IdGenerator.id());
-        travelStrategy.setCreateDate(new Date());
-        travelStrategy.setDescribe(travelStrategy.getDescribe());
-        travelStrategy.setStatus(StatusEnum.UP_STATUS.getCode());
-        travelStrategy.setCreateDate(new Date());
-        travelStrategyRepository.saveAndFlush(travelStrategy);
+    public Result adminSaveInformation(Information information) {
+        information.setId(IdGenerator.id());
+        information.setCreateDate(new Date());
+        information.setDescribe(information.getDescribe());
+        information.setStatus(StatusEnum.UP_STATUS.getCode());
+        information.setCreateDate(new Date());
+        informationRepository.saveAndFlush(information);
         return ResultGenerator.genSuccessResult();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Result saveTravelStrategy(HttpServletRequest request,TravelStrategy travelStrategy) {
+    public Result saveInformation(HttpServletRequest request, Information information) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
             return ResultGenerator.genFailResult("用户没有登录!");
         }
         User user = userRepository.findUserByUsername(cookie.getValue());
-        if (StringUtils.isEmpty(travelStrategy.getId())) {//没有id的情况
-            travelStrategy.setId(IdGenerator.id());
-            travelStrategy.setUser(user);
-            if (travelStrategy.getStatus() == null) {
+        if (StringUtils.isEmpty(information.getId())) {//没有id的情况
+            information.setId(IdGenerator.id());
+            information.setUser(user);
+            if (information.getStatus() == null) {
                 //默认为停用
-                travelStrategy.setStatus(StatusEnum.DOWM_STATUS.getCode());
-                travelStrategy.setCreateDate(new Date());
+                information.setStatus(StatusEnum.DOWM_STATUS.getCode());
+                information.setCreateDate(new Date());
             }
         } else {
             //有id的情况
-            TravelStrategy oldTravelStrategy = getTravelStrategyById(travelStrategy.getId());
-            travelStrategy.setStatus(StatusEnum.Third_STATUS.getCode());
-            travelStrategy.setCreateDate(oldTravelStrategy.getCreateDate());
-            travelStrategy.setUser(oldTravelStrategy.getUser());
-            travelStrategy.setTitle(oldTravelStrategy.getTitle());
-            travelStrategy.setDescribe(oldTravelStrategy.getDescribe());
-            travelStrategy.setErrorMessage(request.getParameter("errorMessage"));
+            Information oldInformation = getInformationById(information.getId());
+            information.setStatus(StatusEnum.Third_STATUS.getCode());
+            information.setCreateDate(oldInformation.getCreateDate());
+            information.setUser(oldInformation.getUser());
+            information.setTitle(oldInformation.getTitle());
+            information.setDescribe(oldInformation.getDescribe());
+            information.setErrorMessage(request.getParameter("errorMessage"));
         }
-        travelStrategyRepository.saveAndFlush(travelStrategy);
+        informationRepository.saveAndFlush(information);
         return ResultGenerator.genSuccessResult();
     }
 }

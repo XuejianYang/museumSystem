@@ -82,9 +82,9 @@
             <script th:src="@{/plugins/owlcarousel/js/owl.carousel.min.js}"></script>
             <script th:src="@{/layer/layer.js}"></script>
             <script th:inline="javascript">
-                function cancelTravelStrategyReserve(id) {
+                function cancelInformationReserve(id) {
                     $.ajax({
-                        url: '/museum/strategy/cancelTravelStrategyReserve',
+                        url: '/museum/strategy/cancelInformationReserve',
                         data: {"id": id},
                         type: 'post',
                         dataType: 'json',
@@ -142,7 +142,7 @@
                         return;
                     }
                     $.ajax({
-                        url: '/museum/strategy/saveTravelStrategy',
+                        url: '/museum/strategy/saveInformation',
                         data: $("#insertMember").serialize(),
                         type: 'post',
                         dataType: 'json',

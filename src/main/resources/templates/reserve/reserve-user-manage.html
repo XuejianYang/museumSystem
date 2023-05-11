@@ -33,14 +33,14 @@
                     <div class="filter-type-box cy-tabs">
                         <ul class="nav nav-tabs mb-10">
                             <li class="active">
-                                <a th:href="@{/strategy/travelStrategyListUI}"><i class="fa"></i><h1>我的预约</h1></a>
+                                <a th:href="@{/templates/information/InformationListUI}"><i class="fa"></i><h1>我的预约</h1></a>
                             </li>
                         </ul>
                     </div>
 
                     <div class="cy-news-grid-item" th:each="yuYue:${yuYueList}">
                         <!--                        <div class="cy-ib-thumbnail pull-left">-->
-                        <!--                            <a th:href="@{/reserve/hotelDetailsUI(id=${yuYue.id})}">-->
+                        <!--                            <a th:href="@{/reserve/CollectionDetailsUI(id=${yuYue.id})}">-->
                         <!--                                <img th:src="@{'/images/'+ ${yuYue.id} +'.jpg'}" class="image_fade" alt="">-->
                         <!--                            </a>-->
                         <!--                        </div>-->

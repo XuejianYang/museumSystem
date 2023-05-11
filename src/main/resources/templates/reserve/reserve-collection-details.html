@@ -36,6 +36,7 @@
                             <span>所在展厅：<span th:text="${collection.address}"></span></span>
 <!--                            <span>浏览次数：<span th:text="${collection.address.length()}"></span></span>-->
                         </div>
+                        <img th:src="@{'/images/'+ ${collection.image} +'.jpg'}" class="image_fade" alt="">
                         <div class="news-detail-content">
                             <p th:text="${collection.describe}">
                             </p>

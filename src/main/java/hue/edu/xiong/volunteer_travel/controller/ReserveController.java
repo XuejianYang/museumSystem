@@ -48,10 +48,10 @@ public class ReserveController {
     }
 
     @RequestMapping("/collectionDetailsUI")
-    public String hotelDetailsUI(Model model, HttpServletRequest request, @RequestParam(name = "id") String id) {
-        Collection collection = reserveService.findHotelById(id);
+    public String CollectionDetailsUI(Model model, HttpServletRequest request, @RequestParam(name = "id") String id) {
+        Collection collection = reserveService.findCollectionById(id);
         //如果用户显示已经预约,就是查看预约列表
-        Boolean flag = reserveService.isReserveHotel(request, id);
+        Boolean flag = reserveService.isReserveCollection(request, id);
         List<Collection> top10Collection = reserveService.getTop10collection();
         List<Exhibition> top10Exhibition = reserveService.getTop10Exhibition();
         model.addAttribute("top10Collection", top10Collection);

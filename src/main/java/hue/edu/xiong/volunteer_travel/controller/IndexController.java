@@ -3,7 +3,7 @@ package hue.edu.xiong.volunteer_travel.controller;
 import hue.edu.xiong.volunteer_travel.model.Exhibition;
 import hue.edu.xiong.volunteer_travel.model.Collection;
 import hue.edu.xiong.volunteer_travel.model.TravelRoute;
-import hue.edu.xiong.volunteer_travel.model.TravelStrategy;
+import hue.edu.xiong.volunteer_travel.model.Information;
 import hue.edu.xiong.volunteer_travel.service.ReserveService;
 import hue.edu.xiong.volunteer_travel.service.RouteService;
 import hue.edu.xiong.volunteer_travel.service.StrategyService;
@@ -31,7 +31,7 @@ public class IndexController {
         List<Collection> top10Collection= reserveService.getTop10collection();
         List<Exhibition> top10Exhibition = reserveService.getTop10Exhibition();
         List<TravelRoute> top10Route = routeService.findTop10Route();
-        List<TravelStrategy> top10Strategy = strategyService.findTop10Strategy();
+        List<Information> top10Strategy = strategyService.findTop10Strategy();
         model.addAttribute("top10Strategy",top10Strategy);
         model.addAttribute("top10Route", top10Route);
         model.addAttribute("top10Collection", top10Collection);

@@ -19,7 +19,7 @@ public class UserCollection {
     @JoinColumn(name = "collection_id")
     private Collection collection;
 
-    @Column(name = "userHotelDescribe")
+    @Column(name = "user_collection_describe")
     private String describe;
 
     @Column(name = "createDate")

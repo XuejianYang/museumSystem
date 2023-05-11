@@ -41,10 +41,10 @@
                                 </button>
                             </div>
                             <!--                            <div  align="left">-->
-                            <!--                                <button type="button"  th:onclick="updateTravelStrategyStatusSH([[${strategy.id}]])" class="btn btn-default btn-danger">通过</button>-->
+                            <!--                                <button type="button"  th:onclick="updateInformationStatusSH([[${strategy.id}]])" class="btn btn-default btn-danger">通过</button>-->
                             <!--                            </div>-->
                             <div align="left">
-                                <button type="button" th:onclick="updateTravelStrategyStatus([[${strategy.id}]])"
+                                <button type="button" th:onclick="updateInformationStatus([[${strategy.id}]])"
                                         class="btn btn-default btn-danger">删除
                                 </button>
                             </div>
@@ -116,13 +116,13 @@
                 return;
             }
             $.ajax({
-                url: '/museum/system/adminSaveTravelStrategy',
+                url: '/museum/system/adminSaveInformation',
                 data: {title: title, describe: describe},
                 type: 'post',
                 dataType: 'json',
                 success: function (result) {
                     if (result.code === 200) {
-                        window.location.href = "/museum/system/travelStrategyListUI";
+                        window.location.href = "/museum/system/InformationListUI";
                     } else {
                         layer.open({
                             title: '错误提示',
@@ -157,7 +157,7 @@
 
         function updateMember(id) {
             $.ajax({
-                url: '/museum/system/getTravelStrategyById',
+                url: '/museum/system/getInformationById',
                 data: {"id": id},
                 type: 'post',
                 dataType: 'json',
@@ -179,9 +179,9 @@
             });
         }
 
-        function updateTravelStrategyStatus(id) {
+        function updateInformationStatus(id) {
             $.ajax({
-                url: '/museum/system/updateTravelStrategyStatus',
+                url: '/museum/system/updateInformationStatus',
                 data: {"id": id},
                 type: 'post',
                 dataType: 'json',
@@ -198,9 +198,9 @@
             })
         }
 
-        function updateTravelStrategyStatusSH(id) {
+        function updateInformationStatusSH(id) {
             $.ajax({
-                url: '/museum/system/updateTravelStrategyStatusSH',
+                url: '/museum/system/updateInformationStatusSH',
                 data: {"id": id},
                 type: 'post',
                 dataType: 'json',

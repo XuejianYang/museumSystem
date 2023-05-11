@@ -45,7 +45,7 @@ public class ReserveService {
 
     public Page<Collection> reserveCollectionListUI(String searchName, String type , Pageable pageable) {
         //查询启用的酒店列表
-        Page<Collection> hotelPage = collectionRepository.findAll((root, query, cb) -> {
+        Page<Collection> CollectionPage = collectionRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             //status状态,查询状态为0,启动的酒店
             predicates.add((cb.equal(root.get("status"), 0)));
@@ -60,10 +60,10 @@ public class ReserveService {
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return hotelPage;
+        return CollectionPage;
     }
 
-    public Collection findHotelById(String id) {
+    public Collection findCollectionById(String id) {
         return collectionRepository.findById(id).orElseThrow(() -> new ServiceException("酒店id错误!"));
     }
 
@@ -106,14 +106,14 @@ public class ReserveService {
     }
 
 
-    public List<UserCollection> getReserveHotelByUser(HttpServletRequest request) {
+    public List<UserCollection> getReserveCollectionByUser(HttpServletRequest request) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
 //            throw new ServiceException("未能获得正确的用户名");
             return new ArrayList<>();
         }
         User user = userRepository.findUserByUsername(cookie.getValue());
-        return userCollectionRepository.findUserHotelsByUser(user);
+        return userCollectionRepository.findUserCollectionsByUser(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -123,7 +123,7 @@ public class ReserveService {
             return ResultGenerator.genFailResult("用户没有登录!");
 //            throw new ServiceException("用户没有登录!");
         }
-        Collection collection = findHotelById(id);
+        Collection collection = findCollectionById(id);
         User user = userRepository.findUserByUsername(cookie.getValue());
         UserCollection userCollection = userCollectionRepository.findUserCollectionByCollectionAndUser(collection, user);
         //存在值就是取消预约.不存在值就是预约
@@ -140,11 +140,11 @@ public class ReserveService {
         return ResultGenerator.genSuccessResult();
     }
 
-    public Boolean isReserveHotel(HttpServletRequest request, String id) {
+    public Boolean isReserveCollection(HttpServletRequest request, String id) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie != null) {
             User user = userRepository.findUserByUsername(cookie.getValue());
-            Collection collection = findHotelById(id);
+            Collection collection = findCollectionById(id);
             UserCollection userCollection = userCollectionRepository.findUserCollectionByCollectionAndUser(collection, user);
             //每个酒店只能预约一次
             if (userCollection != null) {
@@ -205,7 +205,7 @@ public class ReserveService {
     public List<Collection> getTop10collection() {
         PageRequest pageable = PageRequest.of(0, 10);
         //查询启用的酒店列表
-        Page<Collection> hotelPage = collectionRepository.findAll((root, query, cb) -> {
+        Page<Collection> CollectionPage = collectionRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             //status状态,查询状态为0,启动的酒店
 //            predicates.add((cb.equal(root.get("status"), 0)));
@@ -213,7 +213,7 @@ public class ReserveService {
             query.orderBy(cb.desc(root.get("createDate")));
             return null;
         }, pageable);
-        return hotelPage.getContent();
+        return CollectionPage.getContent();
     }
 
     public List<Exhibition> getTop10Exhibition() {

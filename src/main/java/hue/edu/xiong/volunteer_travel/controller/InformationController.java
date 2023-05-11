@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/strategy")
-public class StrategyController {
+@RequestMapping("/information")
+public class InformationController {
 
     @Autowired
     private StrategyService strategyService;
@@ -44,53 +44,53 @@ public class StrategyController {
     @Autowired
     private UserExhibitionRepository userExhibitionRepository;
 
-    @RequestMapping("/travelStrategyListUI")
-    public String travelStrategyListUI(Model model, @ModelAttribute("searchName") String searchName, @PageableDefault(size = 10) Pageable pageable) {
-        Page<TravelStrategy> page = strategyService.TravelStrategyListUI(searchName, pageable);
-        List<TravelStrategy> top10Strategy = strategyService.findTop10Strategy();
+    @RequestMapping("/InformationListUI")
+    public String InformationListUI(Model model, @ModelAttribute("searchName") String searchName, @PageableDefault(size = 10) Pageable pageable) {
+        Page<Information> page = strategyService.InformationListUI(searchName, pageable);
+        List<Information> top10Strategy = strategyService.findTop10Strategy();
         model.addAttribute("top10Strategy", top10Strategy);
         model.addAttribute("page", page);
-        return "strategy/travelStrategy";
+        return "information/information";
     }
 
-    @RequestMapping("/travelStrategyDetailsUI")
-    public String travelStrategyDetailsUI(Model model, HttpServletRequest request, @RequestParam(name = "id") String id) {
-        TravelStrategy travelStrategy = strategyService.findTravelStrategyById(id);
+    @RequestMapping("/InformationDetailsUI")
+    public String InformationDetailsUI(Model model, HttpServletRequest request, @RequestParam(name = "id") String id) {
+        Information information = strategyService.findInformationById(id);
         //如果用户显示已经关注,就是查看关注列表
         Boolean flag = strategyService.isStrategy(request, id);
-        List<TravelStrategy> top10Strategy = strategyService.findTop10Strategy();
+        List<Information> top10Strategy = strategyService.findTop10Strategy();
         List<UserLike> likeList = likeRepository.findLikeByItemId(id);
         List<UserComment> commentList = userCommentRepository.findUserCommentByItemId(id);
         int numb = likeList.size();
         model.addAttribute("top10Strategy", top10Strategy);
-        model.addAttribute("travelStrategy", travelStrategy);
+        model.addAttribute("information", information);
         model.addAttribute("flag", flag);
         model.addAttribute("numb", numb);
         model.addAttribute("commentList", commentList);
-        return "strategy/travelStrategy-details";
+        return "information/information_details";
     }
 
-    @RequestMapping("/cancelTravelStrategyReserve")
+    @RequestMapping("/cancelInformationReserve")
     @ResponseBody
-    public Result cancelTravelStrategyReserve(HttpServletRequest request, String id) {
-        return strategyService.cancelTravelStrategyReserve(request, id);
+    public Result cancelInformationReserve(HttpServletRequest request, String id) {
+        return strategyService.cancelInformationReserve(request, id);
     }
-    @RequestMapping("/travelStrategyLike")
+    @RequestMapping("/InformationLike")
     @ResponseBody
-    public Result travelStrategyLike(HttpServletRequest request, String id) {
-        return strategyService.travelStrategyLike(request, id);
+    public Result InformationLike(HttpServletRequest request, String id) {
+        return strategyService.InformationLike(request, id);
     }
-    @RequestMapping("/commentTravelStrategy")
+    @RequestMapping("/commentInformation")
     @ResponseBody
-    public Result commentTravelStrategy(HttpServletRequest request, UserComment userComment) {
-        return strategyService.commentTravelStrategy(request, userComment);
+    public Result commentInformation(HttpServletRequest request, UserComment userComment) {
+        return strategyService.commentInformation(request, userComment);
     }
 
     @RequestMapping("/strategyManageUI")
     public String strategyManageUI(Model model, HttpServletRequest request) {
         Cookie cookie = CookieUitl.get(request, "username");
         if (cookie == null) {
-            return "strategy/strategy-manage";
+            return "information/strategy-manage";
         }
         User user = userRepository.findUserByUsername(cookie.getValue());
         List<Exhibition> top10Exhibition = reserveService.getTop10Exhibition();
@@ -103,21 +103,21 @@ public class StrategyController {
         });
         model.addAttribute("top10Exhibition", top10Exhibition);
         model.addAttribute("userStrategyList", attractionList);
-        return "strategy/strategy-manage";
+        return "information/strategy-manage";
     }
 
-    @RequestMapping("/saveTravelStrategy")
+    @RequestMapping("/saveInformation")
     @ResponseBody
-    public Result saveTravelStrategy(HttpServletRequest request, TravelStrategy travelStrategy) {
-        return strategyService.saveTravelStrategy(request, travelStrategy);
+    public Result saveInformation(HttpServletRequest request, Information information) {
+        return strategyService.saveInformation(request, information);
     }
 
     @RequestMapping("/pushStrategyListUI")
     public String pushStrategyListUI(HttpServletRequest request, Model model, @ModelAttribute("searchName") String searchName, @PageableDefault(size = 10) Pageable pageable) {
-        Page<TravelStrategy> page = strategyService.PushStrategyListUI(request,searchName, pageable);
-        List<TravelStrategy> top10Strategy = strategyService.findTop10Strategy();
+        Page<Information> page = strategyService.PushStrategyListUI(request,searchName, pageable);
+        List<Information> top10Strategy = strategyService.findTop10Strategy();
         model.addAttribute("top10Strategy", top10Strategy);
         model.addAttribute("page", page);
-        return "strategy/pushStrategy";
+        return "information/pushStrategy";
     }
 }

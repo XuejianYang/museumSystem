@@ -1,7 +1,7 @@
 package hue.edu.xiong.volunteer_travel.repository;
 
 import hue.edu.xiong.volunteer_travel.model.User;
-import hue.edu.xiong.volunteer_travel.model.TravelStrategy;
+import hue.edu.xiong.volunteer_travel.model.Information;
 import hue.edu.xiong.volunteer_travel.model.UserStrategy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -12,5 +12,5 @@ public interface UserStrategyRepository extends JpaRepository<UserStrategy, Stri
     // 用户收藏的
     List<UserStrategy> findUserStrategyByUser(User user);
 
-    UserStrategy findUserStrategyByTravelStrategyAndUser(TravelStrategy travelStrategy, User user);
+    UserStrategy findUserStrategyByInformationAndUser(Information information, User user);
 }

@@ -5,8 +5,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "travel_strategy")
-public class TravelStrategy {
+@Table(name = "information")
+public class Information {
 
     @Id
     @Column(name = "id")
@@ -20,13 +20,13 @@ public class TravelStrategy {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "strategy_describe")
+    @Column(name = "information_describe")
     private String describe;
 
     @Column(name = "create_date")
     private Date createDate;
 
-    @Column(name = "strategy_status")
+    @Column(name = "information_status")
     private Integer status;
 
     @Column(name = "error_message")

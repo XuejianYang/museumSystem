@@ -46,7 +46,7 @@ public class SystemController {
     private UserStrategyRepository userStrategyRepository;
 
     @Autowired
-    private TravelStrategyRepository travelStrategyRepository;
+    private InformationRepository informationRepository;
 
 
     @RequestMapping("")
@@ -95,14 +95,14 @@ public class SystemController {
 
     @RequestMapping("/collectionListUI")
     public String collectionListUI(Model model, @PageableDefault(size = 10) Pageable pageable) {
-        Page<Collection> page = systemService.getHotelPage(pageable);
+        Page<Collection> page = systemService.getCollectionPage(pageable);
         model.addAttribute("page", page);
         return "system/collection/list";
     }
 
     @RequestMapping("/saveCollection")
     @ResponseBody
-    public Result saveHotel(Collection collection) {
+    public Result saveCollection(Collection collection) {
         return systemService.saveCollection(collection);
     }
 
@@ -171,9 +171,9 @@ public class SystemController {
         return systemService.saveTravelRoute(travelRoute);
     }
 
-    @RequestMapping("/travelStrategyListUI")
-    public String travelStrategyListUI(Model model, @PageableDefault(size = 10) Pageable pageable) {
-        Page<TravelStrategy> page2 = systemService.getTravelStrategyPage(pageable);
+    @RequestMapping("/InformationListUI")
+    public String InformationListUI(Model model, @PageableDefault(size = 10) Pageable pageable) {
+        Page<Information> page2 = systemService.getInformationPage(pageable);
         model.addAttribute("page", page2);
         return "system/strategy/list";
     }
@@ -240,16 +240,16 @@ public class SystemController {
         userYuYueRepository.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
-    @RequestMapping("/getTravelStrategyById")
+    @RequestMapping("/getInformationById")
     @ResponseBody
-    public Result getTravelStrategyById(String id) {
-        return ResultGenerator.genSuccessResult(systemService.getTravelStrategyById(id));
+    public Result getInformationById(String id) {
+        return ResultGenerator.genSuccessResult(systemService.getInformationById(id));
     }
 
-    @RequestMapping("/updateTravelStrategyStatus")
+    @RequestMapping("/updateInformationStatus")
     @ResponseBody
-    public Result updateTravelStrategyStatus(String id) {
-        return systemService.updateTravelStrategyStatus(id);
+    public Result updateInformationStatus(String id) {
+        return systemService.updateInformationStatus(id);
     }
 
     /**
@@ -257,20 +257,20 @@ public class SystemController {
      * @param id 数据id
      * @return 返回状态
      */
-    @RequestMapping("/updateTravelStrategyStatusSH")
+    @RequestMapping("/updateInformationStatusSH")
     @ResponseBody
-    public Result updateTravelStrategyStatusSH(String id) {
-        return systemService.updateTravelStrategyStatusSH(id);
+    public Result updateInformationStatusSH(String id) {
+        return systemService.updateInformationStatusSH(id);
     }
 
-    @RequestMapping("/saveTravelStrategy")
+    @RequestMapping("/saveInformation")
     @ResponseBody
-    public Result saveTravelStrategy(HttpServletRequest request,TravelStrategy travelStrategy) {
-        return systemService.saveTravelStrategy(request,travelStrategy);
+    public Result saveInformation(HttpServletRequest request, Information information) {
+        return systemService.saveInformation(request, information);
     }
-    @RequestMapping("/adminSaveTravelStrategy")
+    @RequestMapping("/adminSaveInformation")
     @ResponseBody
-    public Result adminSaveTravelStrategy(TravelStrategy travelStrategy) {
-        return systemService.adminSaveTravelStrategy(travelStrategy);
+    public Result adminSaveInformation(Information information) {
+        return systemService.adminSaveInformation(information);
     }
 }

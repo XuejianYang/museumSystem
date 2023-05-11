@@ -14,7 +14,7 @@
                         <div class="med_tittle_cont">
                             <ol class="breadcrumb">
                                 <li><a th:href="@{/}">首页</a></li>
-                                <li><a th:href="@{/strategy/travelStrategyListUI}">资讯</a></li>
+                                <li><a th:href="@{/templates/information/InformationListUI}">资讯</a></li>
                                 <li><a href="#">资讯详情</a></li>
                             </ol>
                         </div>
@@ -52,7 +52,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
-                            <button type="button" class="btn btn-info" th:onclick=userComment([[${travelStrategy.id}]],'评论',)>提交</button>
+                            <button type="button" class="btn btn-info" th:onclick=userComment([[${information.id}]],'评论',)>提交</button>
                         </div>
                     </div>
                 </div>
@@ -61,23 +61,23 @@
             <div class="row med_toppadder50 med_bottompadder50">
                 <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">
                     <div class="news-detail-box">
-                        <h3 th:text="${travelStrategy.title}"></h3>
+                        <h3 th:text="${information.title}"></h3>
                         <div class="author-info">
-                            <span th:text="${#calendars.format(travelStrategy.createDate,'yyyy-MM-dd')}"></span>
+                            <span th:text="${#calendars.format(information.createDate,'yyyy-MM-dd')}"></span>
                             <!--<span>所在地：<span th:text="${travelRoute.address}"></span></span>-->
 <!--                            <span>浏览次数：13</span>-->
                         </div>
                         <div class="news-detail-content">
-                            <p th:text="${travelStrategy.describe}">
+                            <p th:text="${information.describe}">
                             </p>
                             <div align="right" style="float:right">
-<!--                                <button  th:onclick="like([[${travelStrategy.id}]],'点赞')"-->
+<!--                                <button  th:onclick="like([[${information.id}]],'点赞')"-->
 <!--                                        type="button" class="btn btn-default btn-info">(<span th:text="${numb}"></span>)点赞-->
 <!--                                </button>-->
-<!--                                <button th:if="${flag == false}" th:onclick="cancelTravelStrategyReserve([[${travelStrategy.id}]],'收藏')"-->
+<!--                                <button th:if="${flag == false}" th:onclick="cancelInformationReserve([[${information.id}]],'收藏')"-->
 <!--                                        type="button" class="btn btn-default btn-info">收藏-->
 <!--                                </button>-->
-<!--                                <button th:if="${flag == true }" th:onclick="cancelTravelStrategyReserve([[${travelStrategy.id}]],'取消收藏')"-->
+<!--                                <button th:if="${flag == true }" th:onclick="cancelInformationReserve([[${information.id}]],'取消收藏')"-->
 <!--                                        type="button" class="btn btn-default btn-info">-->
 <!--                                    取消收藏-->
 <!--                                </button>-->
@@ -110,9 +110,9 @@
                             <h3>热门资讯</h3>
                         </div>
                         <ul class="sider-list-model-a">
-                            <li th:each="travelStrategy:${top10Strategy}">
-                                <a th:href="@{/strategy/travelStrategyDetailsUI(id=${travelStrategy.id})}"
-                                   th:text="${travelStrategy.title}">XXXX</a>
+                            <li th:each="information:${top10Strategy}">
+                                <a th:href="@{/templates/information/InformationDetailsUI(id=${information.id})}"
+                                   th:text="${information.title}">XXXX</a>
                             </li>
                         </ul>
                     </div>
@@ -122,9 +122,9 @@
     </div>
     <!--service section end-->
     <script th:inline="javascript">
-        function cancelTravelStrategyReserve(id, str) {
+        function cancelInformationReserve(id, str) {
             $.ajax({
-                url: '/museum/strategy/cancelTravelStrategyReserve',
+                url: '/museum/strategy/cancelInformationReserve',
                 data: {"id": id},
                 type: 'post',
                 dataType: 'json',
@@ -136,7 +136,7 @@
                             window.location.reload();
                         }else{
                             confirm(str + "成功!"); //在页面上弹出对话框
-                            // window.location.href = "/travel/strategy/travelStrategyListUI";
+                            // window.location.href = "/travel/strategy/InformationListUI";
                             window.location.reload();
                         }
                     } else {

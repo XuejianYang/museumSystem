@@ -18,7 +18,7 @@ public class UserStrategy {
 
     @OneToOne
     @JoinColumn(name = "strategy_id")
-    private TravelStrategy travelStrategy;
+    private Information information;
 
     @Column(name = "create_date")
     private Date createDate;
@@ -34,9 +34,13 @@ public class UserStrategy {
 
     public void setUser(User user) { this.user = user; }
 
-    public TravelStrategy getTravelStrategy() { return travelStrategy; }
+    public Information getInformation() {
+        return information;
+    }
 
-    public void setTravelStrategy(TravelStrategy travelStrategy) { this.travelStrategy = travelStrategy; }
+    public void setInformation(Information information) {
+        this.information = information;
+    }
 
     public Date getCreateDate() { return createDate; }
 
